@@ -16,4 +16,6 @@ interface HorseInterface
     public function endurance(): Endurance;
 
     public function distance(): Distance;
+
+    public function move(): void;
 }
