@@ -19,15 +19,15 @@ final class Speed
         $this->speed = self::BASE_SPEED + $speed;
     }
 
+    public function subtract(float $delta): self
+    {
+        return new self($this->speed - self::BASE_SPEED - $delta);
+    }
+
     public function value(): float
     {
         return $this->speed;
     }
-
-//    public function slowSpeedValue(Strength $strength): float
-//    {
-//        return $this->speed - 5 * $strength->value() * 8 / 100;
-//    }
 
     public function __toString()
     {
