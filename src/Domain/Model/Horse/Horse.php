@@ -10,15 +10,21 @@ final class Horse implements HorseInterface
     private $speed;
     private $strength;
     private $endurance;
-    private $distanceCovered;
+    private $distance;
 
-    public function __construct(Name $name, Speed $speed, Strength $strength, Endurance $endurance, Distance $distanceCovered)
+    public function __construct(
+        Name $name,
+        Speed $speed,
+        Strength $strength,
+        Endurance $endurance,
+        Distance $distance
+    )
     {
-        $this->name            = $name;
-        $this->speed           = $speed;
-        $this->strength        = $strength;
-        $this->endurance       = $endurance;
-        $this->distanceCovered = $distanceCovered;
+        $this->name      = $name;
+        $this->speed     = $speed;
+        $this->strength  = $strength;
+        $this->endurance = $endurance;
+        $this->distance  = $distance;
     }
 
     public function speed(): Speed
@@ -26,23 +32,33 @@ final class Horse implements HorseInterface
         return $this->speed;
     }
 
-    public function slowSpeed(): Speed
-    {
-        return new Speed($this->speed->value() - 5 * $this->strength->value() * 8 / 100);
-    }
-
-    public function fullSpeedDistance(): Distance
-    {
-        return new Distance($this->endurance->value() * 100);
-    }
-
     public function name(): Name
     {
         return $this->name;
     }
 
+    public function strength(): Strength
+    {
+        return $this->strength;
+    }
+
+    public function endurance(): Endurance
+    {
+        return $this->endurance;
+    }
+
+    public function distance(): Distance
+    {
+        return $this->distance;
+    }
+
+    public function move(): void
+    {
+        $this->distance = $this->distance->increaseBySpeed($this->speed());
+    }
+
     public function __toString()
     {
-        return (string) $this->name;
+        return sprintf('%s Speed: %s, Strength: %s', $this->name, $this->speed, $this->strength);
     }
 }
