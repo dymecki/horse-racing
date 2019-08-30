@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace App\Domain\Model\Race;
 
+use App\Domain\Model\Horse\HorseInterface;
+
 final class Race
 {
     const RACE_DISTANCE   = 1500;
@@ -11,7 +13,7 @@ final class Race
 
     private $horses;
 
-    public function addHorse(RunningHorse $horse): void
+    public function addHorse(HorseInterface $horse): void
     {
         $this->horses[] = $horse;
     }
@@ -31,7 +33,7 @@ final class Race
     {
         for ($i = 0; $i < self::ADVANCE_SECONDS; $i++) {
             foreach ($this->horses as $horse) {
-                if (!$horse->isStillRunning(self::RACE_DISTANCE)) {
+                if (!$this->isStillRunning($horse)) {
                     continue;
                 }
 
@@ -43,12 +45,17 @@ final class Race
     public function isOver(): bool
     {
         foreach ($this->horses as $horse) {
-            if ($horse->isStillRunning(self::RACE_DISTANCE)) {
+            if ($this->isStillRunning($horse)) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    public function isStillRunning(HorseInterface $horse): bool
+    {
+        return $horse->distance()->value() < self::RACE_DISTANCE;
     }
 
     public function horses(): array
