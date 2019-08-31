@@ -4,20 +4,20 @@ declare(strict_types = 1);
 
 namespace App\Domain\Model\Horse;
 
-use App\Domain\Model\Horse\RunningHorse;
+use App\Domain\Model\Horse\Stats\HorseStats;
+use App\Domain\Model\Race\RunningHorse;
+use App\Domain\Model\Race\Stats\RunningHorseStats;
 
 final class HorseFactory
 {
+
     public static function make(): RunningHorse
     {
         $horse = new Horse(
-            new Name('Secretariat_' . rand(0, 100)),
-            new Speed(rand(0, 10)),
-            new Strength(rand(0, 10)),
-            new Endurance(rand(0, 10)),
-            new Distance()
+            new HorseId(uniqid()),
+            HorseStats::create(rand(0, 10), rand(0, 10), rand(0, 10))
         );
 
-        return new RunningHorse($horse);
+        return new RunningHorse($horse, RunningHorseStats::start());
     }
 }

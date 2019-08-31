@@ -9,13 +9,10 @@ interface HorseInterface
 
     public function name(): Name;
 
-    public function speed(): Speed;
+//    public function speed(): Speed;
+//    public function strength(): Strength;
+//    public function endurance(): Endurance;
+//    public function distance(): Distance;
 
-    public function strength(): Strength;
-
-    public function endurance(): Endurance;
-
-    public function distance(): Distance;
-
-    public function move(): void;
+//    public function move(): void;
 }

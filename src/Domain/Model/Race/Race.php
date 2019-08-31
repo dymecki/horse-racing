@@ -5,15 +5,26 @@ declare(strict_types = 1);
 namespace App\Domain\Model\Race;
 
 use App\Domain\Model\Horse\HorseInterface;
+use App\Domain\Model\Horse\Stats\Distance;
 
 final class Race
 {
-    const RACE_DISTANCE   = 1500;
     const ADVANCE_SECONDS = 10;
 
     private $horses;
+    private $distance;
 
-    public function addHorse(HorseInterface $horse): void
+    private function __construct(Distance $distance)
+    {
+        $this->distance = $distance;
+    }
+
+    public static function init(int $distance): self
+    {
+        return new self(new Distance($distance));
+    }
+
+    public function addRunningHorse(RunningHorse $horse): void
     {
         $this->horses[] = $horse;
     }
@@ -53,9 +64,9 @@ final class Race
         return true;
     }
 
-    public function isStillRunning(HorseInterface $horse): bool
+    public function isStillRunning(RunningHorse $horse): bool
     {
-        return $horse->distance()->value() < self::RACE_DISTANCE;
+        return $horse->stats()->distance()->isLess($this->distance);
     }
 
     public function horses(): array
@@ -65,6 +76,6 @@ final class Race
 
     public function distance(): int
     {
-        return self::RACE_DISTANCE;
+        return $this->distance;
     }
 }

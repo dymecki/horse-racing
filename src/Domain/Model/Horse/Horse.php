@@ -4,61 +4,31 @@ declare(strict_types = 1);
 
 namespace App\Domain\Model\Horse;
 
-final class Horse implements HorseInterface
+use App\Domain\Model\Horse\Stats\HorseStats;
+
+final class Horse
 {
-    private $name;
-    private $speed;
-    private $strength;
-    private $endurance;
-    private $distance;
+    private $id;
+    private $stats;
 
-    public function __construct(
-        Name $name,
-        Speed $speed,
-        Strength $strength,
-        Endurance $endurance,
-        Distance $distance
-    )
+    public function __construct(HorseId $id, HorseStats $stats)
     {
-        $this->name      = $name;
-        $this->speed     = $speed;
-        $this->strength  = $strength;
-        $this->endurance = $endurance;
-        $this->distance  = $distance;
+        $this->id    = $id;
+        $this->stats = $stats;
     }
 
-    public function speed(): Speed
+    public function id(): HorseId
     {
-        return $this->speed;
+        return $this->id;
     }
 
-    public function name(): Name
+    public function stats(): HorseStats
     {
-        return $this->name;
-    }
-
-    public function strength(): Strength
-    {
-        return $this->strength;
-    }
-
-    public function endurance(): Endurance
-    {
-        return $this->endurance;
-    }
-
-    public function distance(): Distance
-    {
-        return $this->distance;
-    }
-
-    public function move(): void
-    {
-        $this->distance = $this->distance->increaseBySpeed($this->speed());
+        return $this->stats;
     }
 
     public function __toString()
     {
-        return sprintf('%s Speed: %s, Strength: %s', $this->name, $this->speed, $this->strength);
+        return sprintf('%s', $this->id);
     }
 }

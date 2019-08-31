@@ -8,16 +8,16 @@ final class HorseId
 {
     private $id;
 
-    public function __construct(int $id)
+    public function __construct(string $id)
     {
-        if ($id < 0) {
+        if (!$id) {
             throw new InvalidArgumentException('Horse id cannot be negative');
         }
 
         $this->id = $id;
     }
 
-    public function value(): int
+    public function value(): string
     {
         return $this->id;
     }

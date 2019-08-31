@@ -8,29 +8,43 @@ final class Speed
 {
     const BASE_SPEED = 5.0;
 
-    private $speed;
+    private $distance;
+    private $time;
 
-    public function __construct(float $speed)
+    private function __construct(Distance $distance, Seconds $time)
     {
-        if ($speed < 0 || $speed > 10) {
-            throw new \InvalidArgumentException('Speed value must be in range of 0.0 - 10.0');
-        }
+        $this->distance = $distance;
+        $this->time     = $time;
+    }
 
-        $this->speed = self::BASE_SPEED + $speed;
+    public static function init(float $distance): self
+    {
+        return new self(
+            new Distance($distance),
+            new Seconds(1)
+        );
     }
 
     public function subtract(float $delta): self
     {
-        return new self($this->speed - self::BASE_SPEED - $delta);
+        return new self(
+            new Distance($this->distance->value() - self::BASE_SPEED - $delta),
+            $this->time
+        );
     }
 
-    public function value(): float
+    public function distance(): Distance
     {
-        return $this->speed;
+        return $this->distance;
+    }
+
+    public function time(): Seconds
+    {
+        return $this->time;
     }
 
     public function __toString()
     {
-        return sprintf('%s m/s', $this->speed);
+        return sprintf('%s / %s', $this->distance, $this->time);
     }
 }

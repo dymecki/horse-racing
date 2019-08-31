@@ -24,13 +24,13 @@ final class Distance
 
     public function increaseBySpeed(Speed $speed): self
     {
-        return new self($this->distance + $speed->value());
+        return new self($this->distance + $speed->distance()->value());
     }
 
-//    public function subtract(self $distance): self
-//    {
-//        return new self($this->distance - $distance->value());
-//    }
+    public function withAdd(Distance $distance): self
+    {
+        return new self($this->distance + $distance->value());
+    }
 
     public function isLess(self $distance): bool
     {

@@ -14,19 +14,34 @@ $raceDao  = new RaceDao();
 $horseDao = new HorseDao();
 
 $race  = RaceFactory::make();
-$horse = HorseFactory::make();
+$runningHorse = HorseFactory::make();
 
 //$raceDao->addRace($race);
 //$horseDao->addHorse($horse);
 
+$runningHorse->runForSeconds(10);
+$console = new RunningHorsesConsole([$runningHorse]);
+$console->render();
+exit;
+
+for ($i = 0; $i < 5; $i++) {
+    $console = new RunningHorsesConsole([$runningHorse]);
+    $console->render();
+    $runningHorse->move();
+}
+
+//$console = new RunningHorsesConsole([$horse]);
+//$console->render();
+exit;
 
 
 $step = 1;
 
-while (!$race->isOver()) {
+while ($step < 3) {
     $race->moveHorses();
 
     echo 'Step: ' . $step . "\n";
-    echo new RunningHorsesConsole($race->horses());
+    $console = new RunningHorsesConsole($race->horses());
+    $console->render();
     $step++;
 }
