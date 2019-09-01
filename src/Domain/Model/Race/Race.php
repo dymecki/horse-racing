@@ -7,6 +7,7 @@ namespace App\Domain\Model\Race;
 use App\Domain\Model\Horse\HorseInterface;
 use App\Domain\Model\Horse\Stats\Distance;
 use App\Domain\Model\Race\RaceId;
+use App\Domain\Model\Horse\Stats\Seconds;
 
 final class Race
 {
@@ -96,7 +97,12 @@ final class Race
 
     public function isStillRunning(RunningHorse $horse): bool
     {
-        return $horse->stats()->distance()->isLess($this->distance);
+        return $horse->stats()->distanceCovered()->isLess($this->distance);
+    }
+
+    public function time(): Seconds
+    {
+        return isset($this->horses[0]) ? $this->horses[0]->stats()->time() : new Seconds(0);
     }
 
     public function id(): RaceId
