@@ -35,8 +35,8 @@ class CreateRacesHorsesTable extends AbstractMigration
      */
     public function change()
     {
-        $this->table('races_horses', ['id' => false, 'primary_key' => ['race_horse_id']])
-            ->addColumn('race_horse_id', 'uuid', ['default' => Literal::from('uuid_generate_v4()')])
+        $this->table('races_horses', ['id' => false])
+//            ->addColumn('race_horse_id', 'uuid', ['default' => Literal::from('uuid_generate_v4()')])
             ->addColumn('race_id', 'uuid')
             ->addColumn('horse_id', 'uuid')
             ->addColumn('created_at', 'timestamp', ['default' => 'CURRENT_TIMESTAMP'])
