@@ -22,7 +22,7 @@ final class RunningHorseInternalState
             'speed'             => $horse->horse()->stats()->speed(),
             'strength'          => $horse->horse()->stats()->strength(),
             'endurance'         => $horse->horse()->stats()->endurance(),
-            'distance'          => $horse->stats()->distance(),
+            'distance'          => $horse->stats()->distanceCovered(),
             'fullSpeedDistance' => $horse->fullSpeedDistance(),
             'time'              => $horse->stats()->time(),
             'secondsPerMeter'   => $horse->horse()->stats()->speed()->secondsPerMeter()
