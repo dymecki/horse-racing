@@ -17,12 +17,12 @@ final class HorseService
         $this->horse = new HorseDao();
     }
 
-    public function addNewHorse()
-    {
-        $horse = HorseFactory::make();
-
-        $this->horse->addHorse($horse);
-    }
+//    public function addNewHorse()
+//    {
+//        $horse = HorseFactory::make();
+//
+//        $this->horse->addHorse($horse);
+//    }
 
     public function getAll()
     {
