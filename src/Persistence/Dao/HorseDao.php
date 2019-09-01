@@ -50,13 +50,7 @@ final class HorseDao extends BaseDao
         return Horse::create($stmt->fetch());
     }
 
-    public function addNewProgress(Race $race, Horse $horse)
-    {
-        $this->db()
-            ->prepare('INSERT INTO progress (race_id, horse_id) VALUES (?, ?)')
-            ->execute([$race->id(), $horse->id()]);
-    }
-
+    // TODO: implement proper sql query
     public function getBestEverHorse()
     {
         return $this->db()->query('SELECT * FROM horses LIMIT 1')->fetch();
