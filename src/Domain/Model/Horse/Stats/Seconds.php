@@ -29,6 +29,6 @@ final class Seconds
 
     public function __toString()
     {
-        return sprintf('%s s', $this->seconds);
+        return (string) $this->seconds;
     }
 }
