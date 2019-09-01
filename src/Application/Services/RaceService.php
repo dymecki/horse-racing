@@ -6,64 +6,72 @@ namespace App\Application\Services;
 
 use App\Domain\Model\Race\RaceFactory;
 use App\Persistence\Dao\RaceDao;
-use App\Persistence\Dao\HorseDao;
+use App\Application\DtoAssemblers\RaceDtoAssembler;
+use App\Persistence\Dao\Mappers\RaceMapper;
 
 final class RaceService
 {
     const MAX_RACES_AMOUNT = 3;
 
     private $race;
-    private $horse;
 
     public function __construct()
     {
         $this->race  = new RaceDao();
-        $this->horse = new HorseDao();
     }
 
     public function getById(string $raceId)
     {
-        return $this->race->getById($raceId);
+        return $this->getDto([$this->race->getById($raceId)]);
     }
-
-//    public function getRaceHorses(string $raceId)
-//    {
-//        return $this->race->getRaceHorses($raceId);
-//    }
 
     public function canAddNewRace(): bool
     {
         return $this->race->countActiveRaces() < self::MAX_RACES_AMOUNT;
     }
 
-    public function startNewRace()
+    public function startNewRace(): void
     {
         if (!$this->canAddNewRace()) {
-            return false;
+            return;
         }
 
         $this->race->addRace(RaceFactory::make());
     }
 
-    public function moveAllHorses()
+    public function activeRaces(): array
     {
-        
+        return $this->getDto($this->race->getActiveRaces());
     }
 
-    public function activeRaces()
+//    public function getAllRaces()
+//    {
+//        return $this->race->getAll();
+//    }
+
+    public function getLastRacesBestPositions(): array
     {
-        return $this->race->getActiveRaces();
+        return $this->getDto($this->race->getLastRacesBestPositions());
     }
 
-    public function getAllRaces()
+    public function updateRaces(): void
     {
-        return $this->race->getAll();
-    }
+        $activeRaces = $this->race->getActiveRaces();
+        $races       = (new RaceMapper($activeRaces))->get();
 
-    public function updateRaces($races)
-    {
+        foreach ($races as $race) {
+            $race->runForSeconds(10);
+        }
+
         foreach ($races as $race) {
             $this->race->updateRaceProgress($race);
         }
+    }
+
+    private function getDto(array $races): array
+    {
+        return array_map(function($race) {
+            return (new RaceDtoAssembler($race))->writeDto();
+        }, (new RaceMapper($races))->get());
     }
 }
