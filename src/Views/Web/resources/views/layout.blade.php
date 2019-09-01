@@ -7,21 +7,37 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha256-YLGeXaapI0/5IgZopewRJcFXomhRMlYYjugPLSyNjTY=" crossorigin="anonymous" />
 
         <style>
+            h1, h2,h3,h4,h5,h6 {
+                color: #909090;
+            }
+            body {
+                /*background-color: #454d55;*/
+            }
+            
             .container nav.navbar {
                 margin-bottom: 20px;
             }
 
             .row.bottom {
                 border-top: 1px solid #efefef;
+                color: #909090;
                 padding: 30px;
                 text-align: center;
             }
+
+            .progress {
+                /*background-color: #606060;*/
+                background-color: transparent;
+                -webkit-box-shadow: none;
+                box-shadow: none;
+            }
+
         </style>
     </head>
     <body>
         <div class="container _container-fluid">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a class="navbar-brand" href="#">HorseRacing</a>
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <a href="{{ route('index') }}" class="navbar-brand">Horse Racing Simulator</a>
 
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -29,15 +45,19 @@
 
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
-                        <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
-                        <a class="nav-item nav-link" href="#">Features</a>
-                        <a class="nav-item nav-link" href="#">Pricing</a>
-                        <a class="nav-item nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                        <a  href="{{ route('index') }}" class="nav-item nav-link _active">Home <span class="sr-only">(current)</span></a>
+                        <a href="{{ route('last-races') }}" class="nav-item nav-link">Last 5 races</a>
+                        <!--<a href="#" class="nav-item nav-link disabled" tabindex="-1" aria-disabled="true">Disabled</a>-->
                     </div>
                 </div>
 
-                <a href="/create-race.php" class="btn btn-success">create race</a>
-                <a href="{{ route('progress') }}" class="btn btn-primary">progress</a>
+                <div class="btn-group float-right" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-secondary">create race</button>
+                    <button type="button" class="btn btn-warning">progress</button>
+                </div>
+
+<!--                <a href="{{ route('create') }}" class="btn btn-secondary">create race</a>
+                <a href="{{ route('progress') }}" class="btn btn-warning">progress</a>-->
             </nav>
 
             <div class="row">
@@ -48,7 +68,7 @@
 
             <div class="row bottom">
                 <div class="col-md-12">
-                    <p>Copyright {{ date('Y') }}</p>
+                    <p>Copyright {{ date('Y') }} Michael Dymecki</p>
                 </div>
             </div>
         </div>
