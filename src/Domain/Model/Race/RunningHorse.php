@@ -22,6 +22,15 @@ final class RunningHorse
         $this->stats = $stats;
     }
 
+    public static function create($data): self
+    {
+//        var_dump($data);exit;
+        return new self(
+            Horse::create($data),
+            RunningHorseStats::create($data->distance_covered, $data->time)
+        );
+    }
+
     public function horse(): Horse
     {
         return $this->horse;
@@ -34,13 +43,19 @@ final class RunningHorse
 
     public function move(): void
     {
-        $this->stats->increaseDistance($this->horse->stats()->speed()->distance());
+        $this->stats->increaseDistance($this->speed()->distance());
         $this->stats->updateTime();
+    }
+
+    public function moveByTime(): void
+    {
+        $this->stats->increaseTime($this->speed()->secondsPerMeter()->value());
+        $this->stats->increaseDistance(new Distance(1));
     }
 
     public function speed(): Speed
     {
-        return $this->isSlower() ? $this->slowSpeed() : $this->horse->speed();
+        return $this->isSlower() ? $this->slowSpeed() : $this->horse->stats()->speed();
     }
 
     public function runForSeconds(int $seconds): void
@@ -57,7 +72,7 @@ final class RunningHorse
 
     public function isStillRunning(int $raceDistance): bool
     {
-        return $this->horse->distance()->value() < $raceDistance;
+        return $this->stats->distance()->value() < $raceDistance;
     }
 
     private function slowSpeed(): Speed
@@ -77,10 +92,10 @@ final class RunningHorse
 
     private function isSlower(): bool
     {
-        return $this->checkIfSlower($this->horse->distance());
+        return $this->checkIfSlower($this->stats()->distance());
     }
 
-    private function fullSpeedDistance(): Distance
+    public function fullSpeedDistance(): Distance
     {
         return new Distance($this->horse->stats()->endurance()->value() * self::ENDURANCE_METERS);
     }

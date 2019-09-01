@@ -10,9 +10,9 @@ final class Distance
 
     public function __construct(float $distance = 0)
     {
-        if ($distance < 0) {
-            throw new \InvalidArgumentException('Distance value cannot be negative');
-        }
+//        if ($distance < 0) {
+//            throw new \InvalidArgumentException('Distance value cannot be negative');
+//        }
 
         $this->distance = $distance;
     }

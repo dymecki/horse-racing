@@ -17,6 +17,11 @@ final class Endurance
         $this->endurance = $endurance;
     }
 
+    public static function create(float $value): self
+    {
+        return new self($value);
+    }
+
     public function value(): float
     {
         return $this->endurance;

@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace App\Domain\Model\Horse;
 
+use Ramsey\Uuid\Uuid;
+
 final class HorseId
 {
     private $id;
@@ -15,6 +17,16 @@ final class HorseId
         }
 
         $this->id = $id;
+    }
+
+    public static function init(): self
+    {
+        return new self(Uuid::uuid4()->toString());
+    }
+
+    public static function create(string $id): self
+    {
+        return new self($id);
     }
 
     public function value(): string

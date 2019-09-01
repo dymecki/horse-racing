@@ -6,23 +6,46 @@ namespace App\Domain\Model\Race;
 
 use App\Domain\Model\Horse\HorseInterface;
 use App\Domain\Model\Horse\Stats\Distance;
+use App\Domain\Model\Race\RaceId;
 
 final class Race
 {
     const ADVANCE_SECONDS = 10;
 
+    private $id;
     private $horses;
     private $distance;
 
-    private function __construct(Distance $distance)
+    private function __construct(RaceId $id, Distance $distance, $horses)
     {
+        $this->id       = $id;
         $this->distance = $distance;
+        $this->horses   = $horses;
     }
 
     public static function init(int $distance): self
     {
-        return new self(new Distance($distance));
+        return new self(RaceId::init(), new Distance($distance), []);
     }
+
+    public static function create($id, int $distance, $horses): self
+    {
+        return new self(
+            new RaceId($id),
+            new Distance($distance),
+            $horses
+        );
+    }
+
+//    public static function fromStd($data): self
+//    {
+//        var_dump($data);
+//        return new self(
+//            RaceId::init(),
+//            new Distance($data->distance),
+//            $data
+//        );
+//    }
 
     public function addRunningHorse(RunningHorse $horse): void
     {
@@ -53,6 +76,13 @@ final class Race
         }
     }
 
+    public function runForSeconds(int $seconds): void
+    {
+        foreach ($this->horses as $horse) {
+            $horse->runForSeconds($seconds);
+        }
+    }
+
     public function isOver(): bool
     {
         foreach ($this->horses as $horse) {
@@ -69,12 +99,17 @@ final class Race
         return $horse->stats()->distance()->isLess($this->distance);
     }
 
+    public function id(): RaceId
+    {
+        return $this->id;
+    }
+
     public function horses(): array
     {
         return $this->horses;
     }
 
-    public function distance(): int
+    public function distance(): Distance
     {
         return $this->distance;
     }

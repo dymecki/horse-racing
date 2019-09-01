@@ -1,9 +1,13 @@
 <?php
 
+declare(strict_types = 1);
+
 use Phinx\Migration\AbstractMigration;
+use Phinx\Util\Literal;
 
 class CreateRaceProgressTable extends AbstractMigration
 {
+
     /**
      * Change Method.
      *
@@ -31,6 +35,16 @@ class CreateRaceProgressTable extends AbstractMigration
      */
     public function change()
     {
-
+        $this->table('horses_progress', ['id' => false])
+//        $this->table('horses_progress', ['id' => false, 'primary_key' => ['id']])
+//            ->addColumn('id', 'uuid', ['default' => Literal::from('uuid_generate_v4()')])
+            ->addColumn('race_horse_id', 'uuid')
+            ->addColumn('distance_covered', 'integer', ['default' => 0])
+            ->addColumn('time', 'integer', ['default' => 0])
+            ->addColumn('created_at', 'timestamp', ['default' => 'CURRENT_TIMESTAMP'])
+            ->addColumn('updated_at', 'timestamp', ['null' => true])
+            ->addIndex(['race_horse_id'])
+            ->addForeignKey('race_horse_id', 'races_horses', 'race_horse_id')
+            ->create();
     }
 }

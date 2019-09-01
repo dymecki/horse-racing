@@ -14,7 +14,7 @@ final class HorseFactory
     public static function make(): RunningHorse
     {
         $horse = new Horse(
-            new HorseId(uniqid()),
+            HorseId::init(),
             HorseStats::create(rand(0, 10), rand(0, 10), rand(0, 10))
         );
 

@@ -33,6 +33,11 @@ final class Speed
         );
     }
 
+    public function secondsPerMeter(): Seconds
+    {
+        return new Seconds($this->time->value() / $this->distance->value());
+    }
+
     public function distance(): Distance
     {
         return $this->distance;
