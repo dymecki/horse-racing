@@ -27,13 +27,12 @@ final class RaceDao extends BaseDao
                     h.speed,
                     h.strength,
                     h.endurance,
-                    p.distance_covered,
-                    p."time"
+                    rh.distance_covered,
+                    rh."time"
                FROM races r
 
                JOIN races_horses rh ON rh.race_id = r.race_id
                JOIN horses h        ON rh.horse_id = h.horse_id
-               JOIN progress p      ON p.race_id = r.race_id AND p.horse_id = h.horse_id
 
               WHERE r.race_id = ?'
         );
@@ -51,15 +50,14 @@ final class RaceDao extends BaseDao
                         h.speed,
                         h.strength,
                         h.endurance,
-                        p.distance_covered,
-                        p."time"
+                        rh.distance_covered,
+                        rh."time"
                    FROM races r
 
                    JOIN races_horses rh ON rh.race_id = r.race_id
                    JOIN horses h        ON rh.horse_id = h.horse_id
-                   JOIN progress p      ON p.race_id = r.race_id AND p.horse_id = h.horse_id
 
-                  WHERE p.distance_covered < r.distance'
+                  WHERE rh.distance_covered < r.distance'
             )->fetchAll(\PDO::FETCH_GROUP);
     }
 

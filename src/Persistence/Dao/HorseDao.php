@@ -32,11 +32,10 @@ final class HorseDao extends BaseDao
         $stmt = $this->db()->prepare(
             'SELECT r.*, h.*
                FROM horses h
-               JOIN races_horses rh
-                 ON rh.horse_id = h.horse_id
-               JOIN races r
-                 ON rh.race_id = r.race_id
-              WHERE h.horse_id = ?'
+               JOIN races_horses rh ON rh.horse_id = h.horse_id
+               JOIN races r         ON rh.race_id = r.race_id
+              WHERE h.horse_id = ?
+              LIMIT 1'
         );
         $stmt->execute([$id]);
 
@@ -68,11 +67,10 @@ final class HorseDao extends BaseDao
         return $this
                 ->db()
                 ->query(
-                    'SELECT r.*, h.*, p.*
+                    'SELECT r.*, h.*, rh.*
                        FROM horses h
                        JOIN races_horses rh ON rh.horse_id = h.horse_id
-                       JOIN races r         ON rh.race_id = r.race_id
-                       JOIN progress p      ON p.race_id = r.race_id AND p.horse_id = h.horse_id'
+                       JOIN races r         ON rh.race_id = r.race_id'
                 )
                 ->fetchAll();
     }
@@ -81,7 +79,7 @@ final class HorseDao extends BaseDao
     {
         $this->db()
             ->prepare(
-                'UPDATE progress
+                'UPDATE races_horses
                     SET distance_covered = :distance_covered,
                         time = :time
                   WHERE race_id = :race_id
