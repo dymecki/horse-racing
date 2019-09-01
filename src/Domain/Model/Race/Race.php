@@ -17,7 +17,7 @@ final class Race
     private $horses;
     private $distance;
 
-    private function __construct(RaceId $id, Distance $distance, $horses)
+    private function __construct(RaceId $id, Distance $distance, array $horses)
     {
         $this->id       = $id;
         $this->distance = $distance;
@@ -29,7 +29,7 @@ final class Race
         return new self(RaceId::init(), new Distance($distance), []);
     }
 
-    public static function create($id, int $distance, $horses): self
+    public static function create(string $id, int $distance, $horses): self
     {
         return new self(
             new RaceId($id),
@@ -64,7 +64,7 @@ final class Race
 //        }
 //    }
 
-    public function moveHorses()
+    public function moveHorses(): void
     {
         for ($i = 0; $i < self::ADVANCE_SECONDS; $i++) {
             foreach ($this->horses as $horse) {
