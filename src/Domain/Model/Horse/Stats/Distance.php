@@ -39,6 +39,6 @@ final class Distance
 
     public function __toString()
     {
-        return sprintf('%s m', $this->distance);
+        return (string) $this->distance;
     }
 }
