@@ -4,7 +4,8 @@
 
 <h1>Last 5 races</h1>
 
-<h3>Race {{ $race->race_id }}</h3>
+@foreach ($races as $race)
+<h6>Race {{ $race->name }}</h6>
 
 <table class="table table-striped table-sm">
     <thead>
@@ -16,18 +17,18 @@
     </thead>
     <tbody>
 
-        @foreach ($race->horses() as $horse)
+        @foreach ($race->runningHorses as $horse)
         <tr>
-            <td>{{ substr($horse->horse_id, 0, 8) }}</td>
+            <td>{{ $horse->name }}</td>
             <td>
                 <div class="progress">
                     <div
                         class="progress-bar progress-bar-striped bg-success"
                         role="progressbar"
-                        style="width: {{ $horse->distance_covered }}%"
-                        aria-valuenow="{{ $horse->distance_covered }}"
+                        style="width: {{ $horse->distanceCovered }}%"
+                        aria-valuenow="{{ $horse->distanceCovered }}"
                         aria-valuemin="0"
-                        aria-valuemax="100">
+                        aria-valuemax="100">{{ $horse->distanceCovered }}
                     </div>
                 </div>
             </td>
@@ -38,4 +39,5 @@
     </tbody>
 </table>
 
+@endforeach
 @endsection

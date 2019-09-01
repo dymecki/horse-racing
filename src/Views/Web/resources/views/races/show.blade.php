@@ -16,7 +16,7 @@
 
         @foreach ($race->horses() as $horse)
         <tr>
-            <td>{{ substr($horse->horse_id, 0, 8) }}</td>
+            <td>{{ $horse->name }}</td>
             <td>
                 <div class="progress">
                     <div
