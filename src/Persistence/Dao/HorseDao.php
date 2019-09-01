@@ -7,6 +7,7 @@ namespace App\Persistence\Dao;
 use App\Domain\Model\Race\RunningHorse;
 use App\Domain\Model\Horse\HorseId;
 use App\Domain\Model\Horse\Horse;
+use App\Domain\Model\Race\Race;
 
 final class HorseDao extends BaseDao
 {
@@ -50,11 +51,11 @@ final class HorseDao extends BaseDao
         return Horse::create($stmt->fetch());
     }
 
-    public function addNewProgress($raceHorseId)
+    public function addNewProgress(Race $race, Horse $horse)
     {
         $this->db()
-            ->prepare('INSERT INTO horses_progress (race_horse_id) VALUES (?)')
-            ->execute([$raceHorseId]);
+            ->prepare('INSERT INTO progress (race_id, horse_id) VALUES (?, ?)')
+            ->execute([$race->id(), $horse->id()]);
     }
 
     public function getBestEverHorse()
@@ -67,12 +68,30 @@ final class HorseDao extends BaseDao
         return $this
                 ->db()
                 ->query(
-                    'SELECT r.*, h.*, hp.*
+                    'SELECT r.*, h.*, p.*
                        FROM horses h
-                       JOIN races_horses rh     ON rh.horse_id = h.horse_id
-                       JOIN races r             ON rh.race_id = r.race_id
-                       JOIN horses_progress hp  ON hp.race_horse_id = rh.race_horse_id'
+                       JOIN races_horses rh ON rh.horse_id = h.horse_id
+                       JOIN races r         ON rh.race_id = r.race_id
+                       JOIN progress p      ON p.race_id = r.race_id AND p.horse_id = h.horse_id'
                 )
                 ->fetchAll();
+    }
+
+    public function updateHorseProgress(Race $race, RunningHorse $horse)
+    {
+        $this->db()
+            ->prepare(
+                'UPDATE progress
+                    SET distance_covered = :distance_covered,
+                        time = :time
+                  WHERE race_id = :race_id
+                    AND horse_id = :horse_id'
+            )
+            ->execute([
+                'distance_covered' => $horse->stats()->distanceCovered()->value(),
+                'time'             => $horse->stats()->time()->value(),
+                'race_id'          => $race->id(),
+                'horse_id'         => $horse->horse()->id()
+        ]);
     }
 }

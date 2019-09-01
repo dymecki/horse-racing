@@ -6,7 +6,6 @@ namespace App\Persistence\Dao;
 
 use App\Domain\Model\Race\Race;
 use App\Persistence\Dao\HorseDao;
-use Ramsey\Uuid\Uuid;
 
 final class RaceDao extends BaseDao
 {
@@ -28,14 +27,13 @@ final class RaceDao extends BaseDao
                     h.speed,
                     h.strength,
                     h.endurance,
-                    hp.race_horse_id,
-                    hp.distance_covered,
-                    hp."time"
+                    p.distance_covered,
+                    p."time"
                FROM races r
 
-               JOIN races_horses rh     ON rh.race_id = r.race_id
-               JOIN horses h            ON rh.horse_id = h.horse_id
-               JOIN horses_progress hp  ON hp.race_horse_id = rh.race_horse_id
+               JOIN races_horses rh ON rh.race_id = r.race_id
+               JOIN horses h        ON rh.horse_id = h.horse_id
+               JOIN progress p      ON p.race_id = r.race_id AND p.horse_id = h.horse_id
 
               WHERE r.race_id = ?'
         );
@@ -53,29 +51,29 @@ final class RaceDao extends BaseDao
                         h.speed,
                         h.strength,
                         h.endurance,
-                        hp.race_horse_id,
-                        hp.distance_covered,
-                        hp."time"
+                        p.distance_covered,
+                        p."time"
                    FROM races r
 
-                   JOIN races_horses rh     ON rh.race_id = r.race_id
-                   JOIN horses h            ON rh.horse_id = h.horse_id
-                   JOIN horses_progress hp  ON hp.race_horse_id = rh.race_horse_id
+                   JOIN races_horses rh ON rh.race_id = r.race_id
+                   JOIN horses h        ON rh.horse_id = h.horse_id
+                   JOIN progress p      ON p.race_id = r.race_id AND p.horse_id = h.horse_id
 
-                  WHERE hp.distance_covered < r.distance'
+                  WHERE p.distance_covered < r.distance'
             )->fetchAll(\PDO::FETCH_GROUP);
     }
 
     public function getRaceHorses(string $raceId)
     {
         $stmt = $this->db()->prepare(
-            'SELECT rh.horse_id, hp.distance_covered, time
+            'SELECT rh.horse_id,
+                    p.distance_covered,
+                    "time"
                FROM races_horses rh
 
-               JOIN horses_progress hp
-                 ON hp.race_horse_id = rh.race_horse_id
+               JOIN progress p ON p.race_id = r.race_id
 
-              WHERE race_id = ?'
+              WHERE rh.race_id = ?'
         );
 
         $stmt->execute([$raceId]);
@@ -83,20 +81,11 @@ final class RaceDao extends BaseDao
         return $stmt->fetchAll();
     }
 
-    public function updateRaceProgress($runningHorse)
+    public function updateRaceProgress(Race $race)
     {
-        $this->db()
-            ->prepare(
-                'UPDATE horses_progress
-                    SET distance_covered = :distance_covered,
-                        time = :time
-                  WHERE race_horse_id = :race_horse_id'
-            )
-            ->execute([
-                'distance_covered' => $race,
-                'time'             => $race,
-                'race_horse_id'    => $race
-        ]);
+        foreach ($race->horses() as $horse) {
+            $this->horse->updateHorseProgress($race, $horse);
+        }
     }
 
     public function addRace(Race $race)
@@ -111,28 +100,15 @@ final class RaceDao extends BaseDao
 
         foreach ($horses as $horse) {
             $this->horse->addHorse($horse);
-        }
-
-        $this->assignHorses($race, $horses);
-
-        $this->db()->commit();
-    }
-
-    public function assignHorses(Race $race, $horses)
-    {
-        foreach ($horses as $horse) {
-            $raceHorseId = Uuid::uuid4()->toString();
 
             $this->db()
-                ->prepare('INSERT INTO races_horses (race_horse_id, race_id, horse_id) VALUES(:race_horse_id, :race_id, :horse_id)')
-                ->execute([
-                    'race_horse_id' => $raceHorseId,
-                    'race_id'       => $race->id()->value(),
-                    'horse_id'      => $horse->horse()->id()->value()
-            ]);
+                ->prepare('INSERT INTO races_horses (race_id, horse_id) VALUES(?, ?)')
+                ->execute([$race->id(), $horse->horse()->id()]);
 
-            $this->horse->addNewProgress($raceHorseId);
+            $this->horse->addNewProgress($race, $horse->horse());
         }
+
+        $this->db()->commit();
     }
 
     public function getAll()
