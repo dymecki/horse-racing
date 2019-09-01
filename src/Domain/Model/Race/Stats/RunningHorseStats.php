@@ -9,13 +9,13 @@ use App\Domain\Model\Horse\Stats\Seconds;
 
 final class RunningHorseStats
 {
-    private $distance;
+    private $distanceCovered;
     private $time;
 
     private function __construct(Distance $distance, Seconds $time)
     {
-        $this->distance = $distance;
-        $this->time     = $time;
+        $this->distanceCovered = $distance;
+        $this->time            = $time;
     }
 
     public static function create(float $distance = 0, float $time = 0): self
@@ -50,21 +50,16 @@ final class RunningHorseStats
 
     public function increaseDistance(Distance $distance): void
     {
-        $this->distance = $this->distance->withAdd($distance);
+        $this->distanceCovered = $this->distanceCovered->withAdd($distance);
     }
 
-    public function distance(): Distance
+    public function distanceCovered(): Distance
     {
-        return $this->distance;
+        return $this->distanceCovered;
     }
 
     public function time(): Seconds
     {
         return $this->time;
-    }
-
-    public function __toString()
-    {
-        return sprintf('Distance: %s, Time: %s', $this->distance, $this->totalTime());
     }
 }
