@@ -6,11 +6,9 @@ namespace App\Application\DtoAssemblers\Dto;
 
 final class RaceDto
 {
+    public $distance;
     public $id;
-    public $speed;
-    public $strength;
-    public $endurance;
-    public $distanceCovered;
+    public $name;
+    public $runningHorses;
     public $time;
-    public $fullSpeedDistance;
 }

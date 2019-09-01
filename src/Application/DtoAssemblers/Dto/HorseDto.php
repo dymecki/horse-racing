@@ -7,6 +7,7 @@ namespace App\Application\DtoAssemblers\Dto;
 final class HorseDto
 {
     public $id;
+    public $name;
     public $speed;
     public $strength;
     public $endurance;
