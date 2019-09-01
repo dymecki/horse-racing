@@ -18,7 +18,6 @@ final class RaceMapper
 
     public function get(): array
     {
-//        var_dump($this->data);
         $races = [];
 
         foreach ($this->data as $raceId => $items) {
@@ -32,7 +31,6 @@ final class RaceMapper
             $races[] = $race;
         }
 
-//        var_dump($races);exit;
         return $races;
     }
 }
