@@ -110,7 +110,7 @@ final class Race
         return $this->id;
     }
 
-    public function horses(): array
+    public function runningHorses(): array
     {
         return $this->horses;
     }
