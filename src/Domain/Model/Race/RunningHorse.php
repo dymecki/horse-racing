@@ -24,10 +24,9 @@ final class RunningHorse
 
     public static function create($data): self
     {
-//        var_dump($data);exit;
         return new self(
             Horse::create($data),
-            RunningHorseStats::create($data->distance_covered, $data->time)
+            RunningHorseStats::create((float) $data->distance_covered, $data->time)
         );
     }
 
@@ -47,32 +46,35 @@ final class RunningHorse
         $this->stats->updateTime();
     }
 
-    public function moveByTime(): void
-    {
-        $this->stats->increaseTime($this->speed()->secondsPerMeter()->value());
-        $this->stats->increaseDistance(new Distance(1));
-    }
+//    public function moveByTime(): void
+//    {
+//        $this->stats->increaseTime($this->speed()->secondsPerMeter()->value());
+//        $this->stats->increaseDistance(new Distance(1));
+//    }
 
     public function speed(): Speed
     {
-        return $this->isSlower() ? $this->slowSpeed() : $this->horse->stats()->speed();
+        return $this->isTired() ? $this->slowSpeed() : $this->horse->stats()->speed();
     }
 
     public function runForSeconds(int $seconds): void
     {
-        $distance = new Distance();
+        $runDistance     = new Distance();
+        $distanceCovered = $this->stats->distanceCovered();
 
         for ($i = 0; $i < $seconds; $i++) {
-            $delta    = $this->checkIfSlower($distance) ? $this->slowSpeed()->distance() : $this->horse->stats()->speed()->distance();
-            $distance = $distance->withAdd($delta);
+//            $delta       = $this->checkIfTired($runDistance) ? $this->slowSpeed()->distance() : $this->horse->stats()->speed()->distance();
+            $delta           = $this->checkIfTired($distanceCovered) ? $this->slowSpeed()->distance() : $this->horse->stats()->speed()->distance();
+            $runDistance     = $runDistance->withAdd($delta);
+            $distanceCovered = $distanceCovered->withAdd($runDistance);
         }
 
-        $this->stats->increase($distance, $seconds);
+        $this->stats->increase($runDistance, $seconds);
     }
 
     public function isStillRunning(int $raceDistance): bool
     {
-        return $this->stats->distance()->value() < $raceDistance;
+        return $this->stats->distanceCovered()->value() < $raceDistance;
     }
 
     private function slowSpeed(): Speed
@@ -85,28 +87,18 @@ final class RunningHorse
         return 5 * $this->horse->stats()->strength()->value() * 8 / 100;
     }
 
-    private function checkIfSlower(Distance $distance): bool
+    private function checkIfTired(Distance $distance): bool
     {
         return $this->fullSpeedDistance()->isLess($distance);
     }
 
-    private function isSlower(): bool
+    private function isTired(): bool
     {
-        return $this->checkIfSlower($this->stats()->distance());
+        return $this->checkIfTired($this->stats()->distanceCovered());
     }
 
     public function fullSpeedDistance(): Distance
     {
         return new Distance($this->horse->stats()->endurance()->value() * self::ENDURANCE_METERS);
-    }
-
-    public function __toString()
-    {
-        return sprintf(
-            '%s - %s, %s',
-            $this->horse,
-            $this->stats->distance(),
-            $this->stats
-        );
     }
 }
