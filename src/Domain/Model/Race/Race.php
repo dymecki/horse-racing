@@ -97,7 +97,7 @@ final class Race
 
     public function isStillRunning(RunningHorse $horse): bool
     {
-        return $horse->stats()->distanceCovered()->isLess($this->distance);
+        return $horse->stats()->distanceCovered()->isLessThan($this->distance);
     }
 
     public function time(): Seconds

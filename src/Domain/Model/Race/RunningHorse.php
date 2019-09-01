@@ -89,7 +89,7 @@ final class RunningHorse
 
     private function checkIfTired(Distance $distance): bool
     {
-        return $this->fullSpeedDistance()->isLess($distance);
+        return $this->fullSpeedDistance()->isLessThan($distance);
     }
 
     private function isTired(): bool
