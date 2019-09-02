@@ -8,7 +8,7 @@ final class Seconds
 {
     private $seconds;
 
-    public function __construct(float $seconds = 0)
+    public function __construct(float $seconds = 0.0)
     {
         if ($seconds < 0) {
             throw new \InvalidArgumentException('Seconds amount cannot be negative');

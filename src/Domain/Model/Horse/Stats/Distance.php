@@ -8,7 +8,7 @@ final class Distance
 {
     private $distance;
 
-    public function __construct(float $distance = 0)
+    public function __construct(float $distance = 0.0)
     {
 //        if ($distance < 0) {
 //            throw new \InvalidArgumentException('Distance value cannot be negative');
