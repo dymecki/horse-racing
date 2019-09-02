@@ -85,4 +85,9 @@ final class Race
     {
         return $this->distance;
     }
+
+    public function name(): string
+    {
+        return substr((string) $this->id, 0, 8);
+    }
 }

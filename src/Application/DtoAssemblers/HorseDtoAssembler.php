@@ -22,7 +22,7 @@ final class HorseDtoAssembler
 
         $dto                  = new HorseDto();
         $dto->id              = $rh->horse()->id()->value();
-        $dto->name            = substr($rh->horse()->id()->value(), 0, 8);
+        $dto->name            = $rh->horse()->name();
         $dto->speed           = $rh->horse()->stats()->speed()->distance()->value();
         $dto->strength        = $rh->horse()->stats()->strength()->value();
         $dto->endurance       = $rh->horse()->stats()->endurance()->value();

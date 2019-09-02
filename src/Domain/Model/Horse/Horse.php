@@ -39,6 +39,11 @@ final class Horse
         return $this->stats;
     }
 
+    public function name(): string
+    {
+        return substr((string) $this->id, 0, 8);
+    }
+
     public function __toString()
     {
         return sprintf('%s', $this->id);

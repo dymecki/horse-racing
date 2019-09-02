@@ -21,7 +21,7 @@ final class RaceDtoAssembler
         $dto           = new RaceDto();
         $dto->id       = $this->race->id()->value();
         $dto->distance = $this->race->distance()->value();
-        $dto->name     = substr($this->race->id()->value(), 0, 8);
+        $dto->name     = $this->race->name();
         $dto->time     = $this->race->time()->value();
 
         foreach ($this->race->runningHorses() as $horse) {
