@@ -14,29 +14,30 @@ final class HorseDao extends BaseDao
 
     public function addHorse(RunningHorse $runningHorse)
     {
-        $this->db()
-            ->prepare(
-                'INSERT INTO horses (horse_id, speed, strength, endurance)
-                 VALUES (:horse_id, :speed, :strength, :endurance)'
-            )
-            ->execute([
-                'horse_id'  => $runningHorse->horse()->id()->value(),
-                'speed'     => $runningHorse->horse()->stats()->speed()->distance()->value(),
-                'strength'  => $runningHorse->horse()->stats()->strength()->value(),
-                'endurance' => $runningHorse->horse()->stats()->endurance()->value()
-        ]);
+        $sql = 'INSERT INTO horses (horse_id, speed, strength, endurance)
+                VALUES (:horse_id, :speed, :strength, :endurance)';
+
+        $data = [
+            'horse_id'  => $runningHorse->horse()->id()->value(),
+            'speed'     => $runningHorse->horse()->stats()->speed()->distance()->value(),
+            'strength'  => $runningHorse->horse()->stats()->strength()->value(),
+            'endurance' => $runningHorse->horse()->stats()->endurance()->value()
+        ];
+
+        $this->db()->prepare($sql)->execute($data);
     }
 
+    // TODO: Tabela "races" chyba nie jest potrzebna
     public function getRunningHorse(HorseId $id): RunningHorse
     {
-        $stmt = $this->db()->prepare(
-            'SELECT r.*, h.*
-               FROM horses h
-               JOIN races_horses rh ON rh.horse_id = h.horse_id
-               JOIN races r         ON rh.race_id = r.race_id
-              WHERE h.horse_id = ?
-              LIMIT 1'
-        );
+        $sql = 'SELECT r.*, h.*
+                  FROM horses h
+                  JOIN races_horses rh USING(horse_id)
+                  JOIN races r         USING(race_id)
+                 WHERE h.horse_id = ?
+                 LIMIT 1';
+
+        $stmt = $this->db()->prepare($sql);
         $stmt->execute([$id]);
 
         return RunningHorse::create($stmt->fetch());
@@ -56,34 +57,31 @@ final class HorseDao extends BaseDao
         return $this->db()->query('SELECT * FROM horses LIMIT 1')->fetch();
     }
 
-    public function getAll()
+    public function getAll(): array
     {
-        return $this
-                ->db()
-                ->query(
-                    'SELECT r.*, h.*, rh.*
+        $sql = 'SELECT r.*, h.*, rh.*
                        FROM horses h
-                       JOIN races_horses rh ON rh.horse_id = h.horse_id
-                       JOIN races r         ON rh.race_id = r.race_id'
-                )
-                ->fetchAll();
+                       JOIN races_horses rh USING(horse_id)
+                       JOIN races r         USING(race_id)';
+
+        return $this->db()->query($sql)->fetchAll();
     }
 
-    public function updateHorseProgress(Race $race, RunningHorse $horse)
+    public function updateHorseProgress(Race $race, RunningHorse $horse): void
     {
-        $this->db()
-            ->prepare(
-                'UPDATE races_horses
-                    SET distance_covered = :distance_covered,
-                        time = :time
-                  WHERE race_id = :race_id
-                    AND horse_id = :horse_id'
-            )
-            ->execute([
-                'distance_covered' => $horse->stats()->distanceCovered()->value(),
-                'time'             => $horse->stats()->time()->value(),
-                'race_id'          => $race->id(),
-                'horse_id'         => $horse->horse()->id()
-        ]);
+        $sql = 'UPDATE races_horses
+                   SET distance_covered = :distance_covered,
+                       time = :time
+                 WHERE race_id = :race_id
+                   AND horse_id = :horse_id';
+
+        $data = [
+            'distance_covered' => $horse->stats()->distanceCovered()->value(),
+            'time'             => $horse->stats()->time()->value(),
+            'race_id'          => $race->id(),
+            'horse_id'         => $horse->horse()->id()
+        ];
+
+        $this->db()->prepare($sql)->execute($data);
     }
 }
