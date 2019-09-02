@@ -26,7 +26,11 @@ final class RunningHorse
     {
         return new self(
             Horse::create($data),
-            RunningHorseStats::create((float) $data->distance_covered, $data->time)
+            RunningHorseStats::create(
+                (float) $data->distance_covered,
+                $data->time,
+                $data->horse_position
+            )
         );
     }
 

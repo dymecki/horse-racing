@@ -11,18 +11,21 @@ final class RunningHorseStats
 {
     private $distanceCovered;
     private $time;
+    private $position;
 
-    private function __construct(Distance $distance, Seconds $time)
+    private function __construct(Distance $distance, Seconds $time, Position $position)
     {
         $this->distanceCovered = $distance;
         $this->time            = $time;
+        $this->position        = $position;
     }
 
-    public static function create(float $distance = 0, float $time = 0): self
+    public static function create(float $distance = 0.0, float $time = 0.0, int $position = 0): self
     {
         return new self(
             new Distance($distance),
-            new Seconds($time)
+            new Seconds($time),
+            new Position($position)
         );
     }
 
@@ -61,5 +64,10 @@ final class RunningHorseStats
     public function time(): Seconds
     {
         return $this->time;
+    }
+
+    public function position(): Position
+    {
+        return $this->position;
     }
 }

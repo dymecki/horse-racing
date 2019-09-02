@@ -28,6 +28,7 @@ final class HorseDtoAssembler
         $dto->endurance       = $rh->horse()->stats()->endurance()->value();
         $dto->distanceCovered = $rh->stats()->distanceCovered()->value();
         $dto->time            = $rh->stats()->time()->value();
+        $dto->position        = $rh->stats()->position()->value();
 
         return $dto;
     }
