@@ -5,8 +5,10 @@ declare(strict_types = 1);
 namespace App\Application\Services;
 
 use App\Persistence\Dao\HorseDao;
-use App\Domain\Model\Horse\HorseFactory;
+//use App\Domain\Model\Horse\HorseFactory;
 use App\Domain\Model\Horse\HorseId;
+use App\Domain\Model\Horse\Horse;
+use App\Domain\Model\Race\RunningHorse;
 
 final class HorseService
 {
@@ -24,17 +26,17 @@ final class HorseService
 //        $this->horse->addHorse($horse);
 //    }
 
-    public function getAll()
+    public function getAll(): array
     {
         return $this->horse->getAll();
     }
 
-    public function getById(string $horseId)
+    public function getById(string $horseId): Horse
     {
         return $this->horse->getHorse(new HorseId($horseId));
     }
 
-    public function getRuningHorse(string $horseId)
+    public function getRuningHorse(string $horseId): RunningHorse
     {
         return $this->horse->getRunningHorse(new HorseId($horseId));
     }
