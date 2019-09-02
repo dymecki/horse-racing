@@ -38,43 +38,9 @@ final class Race
         );
     }
 
-//    public static function fromStd($data): self
-//    {
-//        var_dump($data);
-//        return new self(
-//            RaceId::init(),
-//            new Distance($data->distance),
-//            $data
-//        );
-//    }
-
     public function addRunningHorse(RunningHorse $horse): void
     {
         $this->horses[] = $horse;
-    }
-
-//    public function run()
-//    {
-//        foreach ($this->horses as $horse) {
-//            if (!$horse->isStillRunning(self::RACE_DISTANCE)) {
-//                continue;
-//            }
-//
-//            $horse->move();
-//        }
-//    }
-
-    public function moveHorses(): void
-    {
-        for ($i = 0; $i < self::ADVANCE_SECONDS; $i++) {
-            foreach ($this->horses as $horse) {
-                if (!$this->isStillRunning($horse)) {
-                    continue;
-                }
-
-                $horse->move();
-            }
-        }
     }
 
     public function runForSeconds(int $seconds): void
