@@ -9,6 +9,6 @@ final class RaceDto
     public $distance;
     public $id;
     public $name;
-    public $runningHorses;
+    public $horseRuns;
     public $time;
 }

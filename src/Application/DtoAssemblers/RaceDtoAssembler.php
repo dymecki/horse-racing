@@ -24,9 +24,8 @@ final class RaceDtoAssembler
         $dto->name     = $this->race->name();
         $dto->time     = $this->race->time()->value();
 
-        foreach ($this->race->runningHorses() as $horse) {
-            $horseDtoAssembler    = new HorseDtoAssembler($horse);
-            $dto->runningHorses[] = $horseDtoAssembler->writeDto();
+        foreach ($this->race->horseRuns() as $horse) {
+            $dto->horseRuns[] = (new HorseDtoAssembler($horse))->writeDto();
         }
 
         return $dto;

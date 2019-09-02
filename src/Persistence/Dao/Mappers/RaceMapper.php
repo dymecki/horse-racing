@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace App\Persistence\Dao\Mappers;
 
 use App\Domain\Model\Race\Race;
-use App\Domain\Model\Race\RunningHorse;
+use App\Domain\Model\Race\HorseRun;
 
 final class RaceMapper
 {
@@ -25,7 +25,7 @@ final class RaceMapper
             $race     = Race::create($raceId, $distance, []);
 
             foreach ($items as $item) {
-                $race->addRunningHorse(RunningHorse::create($item));
+                $race->addHorseRun(HorseRun::create($item));
             }
 
             $races[] = $race;

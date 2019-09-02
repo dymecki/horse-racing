@@ -13,7 +13,7 @@ final class RaceFactory
         $race = Race::init(1500);
 
         for ($i = 0; $i < 8; $i++) {
-            $race->addRunningHorse(HorseFactory::make());
+            $race->addHorseRun(HorseFactory::make());
         }
 
         return $race;

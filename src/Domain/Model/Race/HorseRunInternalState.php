@@ -4,11 +4,11 @@ declare(strict_types = 1);
 
 namespace App\Domain\Model\Race;
 
-final class RunningHorseInternalState
+final class HorseRunInternalState
 {
     private $horse;
 
-    public function __construct(RunningHorse $horse)
+    public function __construct(HorseRun $horse)
     {
         $this->horse = $horse;
     }

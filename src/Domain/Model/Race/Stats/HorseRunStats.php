@@ -7,7 +7,7 @@ namespace App\Domain\Model\Race\Stats;
 use App\Domain\Model\Horse\Stats\Distance;
 use App\Domain\Model\Horse\Stats\Seconds;
 
-final class RunningHorseStats
+final class HorseRunStats
 {
     private $distanceCovered;
     private $time;

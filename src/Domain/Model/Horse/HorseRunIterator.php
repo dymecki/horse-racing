@@ -4,22 +4,21 @@ declare(strict_types = 1);
 
 namespace App\Domain\Model\Horse;
 
-use App\Domain\Model\Race\RunningHorse;
-use App\Domain\Model\Horse\HorseCollection;
+use App\Domain\Model\Horse\HorseRunCollection;
 
-final class RunningHorseIterator implements \Iterator
+final class HorseRunIterator implements \Iterator
 {
     private $collection;
     private $key;
 
-    public function __construct(HorseCollection $collection)
+    public function __construct(HorseRunCollection $collection)
     {
         $this->collection = $collection;
     }
 
     public function current()
     {
-        return $this->collection->getRunningHorse($this->key);
+        return $this->collection->getHorseRun($this->key);
     }
 
     public function key(): int

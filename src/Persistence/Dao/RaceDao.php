@@ -60,7 +60,7 @@ final class RaceDao extends BaseDao
 
     public function updateRaceProgress(Race $race)
     {
-        foreach ($race->runningHorses() as $horse) {
+        foreach ($race->horseRuns() as $horse) {
             $this->horse->updateHorseProgress($race, $horse);
         }
     }
@@ -73,7 +73,7 @@ final class RaceDao extends BaseDao
             ->prepare('INSERT INTO races (race_id, distance) VALUES(?, ?)')
             ->execute([$race->id(), $race->distance()->value()]);
 
-        $horses = $race->runningHorses();
+        $horses = $race->horseRuns();
 
         foreach ($horses as $horse) {
             $this->horse->addHorse($horse);

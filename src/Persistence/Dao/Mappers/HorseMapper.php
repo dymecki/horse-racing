@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Persistence\Dao\Mappers;
 
-use App\Domain\Model\Race\RunningHorse;
+use App\Domain\Model\Race\HorseRun;
 
 final class HorseMapper
 {
@@ -15,8 +15,8 @@ final class HorseMapper
         $this->data = $data;
     }
 
-    public function get(): RunningHorse
+    public function get(): HorseRun
     {
-        return RunningHorse::create($this->data);
+        return HorseRun::create($this->data);
     }
 }

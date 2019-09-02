@@ -5,12 +5,12 @@ declare(strict_types = 1);
 namespace App\Domain\Model\Horse;
 
 use App\Domain\Model\Horse\Stats\HorseStats;
-use App\Domain\Model\Race\RunningHorse;
-use App\Domain\Model\Race\Stats\RunningHorseStats;
+use App\Domain\Model\Race\HorseRun;
+use App\Domain\Model\Race\Stats\HorseRunStats;
 
 final class HorseFactory
 {
-    public static function make(): RunningHorse
+    public static function make(): HorseRun
     {
         $horse = new Horse(
             HorseId::init(),
@@ -21,6 +21,6 @@ final class HorseFactory
             )
         );
 
-        return new RunningHorse($horse, RunningHorseStats::start());
+        return new HorseRun($horse, HorseRunStats::start());
     }
 }

@@ -7,16 +7,16 @@ namespace App\Domain\Model\Race;
 use App\Domain\Model\Horse\Horse;
 use App\Domain\Model\Horse\Stats\Distance;
 use App\Domain\Model\Horse\Stats\Speed;
-use App\Domain\Model\Race\Stats\RunningHorseStats;
+use App\Domain\Model\Race\Stats\HorseRunStats;
 
-final class RunningHorse
+final class HorseRun
 {
     const ENDURANCE_METERS = 100;
 
     private $horse;
     private $stats;
 
-    public function __construct(Horse $horse, RunningHorseStats $stats)
+    public function __construct(Horse $horse, HorseRunStats $stats)
     {
         $this->horse = $horse;
         $this->stats = $stats;
@@ -26,7 +26,7 @@ final class RunningHorse
     {
         return new self(
             Horse::create($data),
-            RunningHorseStats::create(
+            HorseRunStats::create(
                 (float) $data->distance_covered,
                 $data->time,
                 $data->horse_position ?? 0
@@ -39,7 +39,7 @@ final class RunningHorse
         return $this->horse;
     }
 
-    public function stats(): RunningHorseStats
+    public function stats(): HorseRunStats
     {
         return $this->stats;
     }
@@ -76,7 +76,7 @@ final class RunningHorse
         $this->stats->increase($runDistance, $seconds);
     }
 
-    public function isStillRunning(int $raceDistance): bool
+    public function isStillGoing(int $raceDistance): bool
     {
         return $this->stats->distanceCovered()->value() < $raceDistance;
     }

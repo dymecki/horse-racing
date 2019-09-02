@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Persistence\Dao;
 
-use App\Domain\Model\Race\RunningHorse;
+use App\Domain\Model\Race\HorseRun;
 use App\Domain\Model\Horse\HorseId;
 use App\Domain\Model\Horse\Horse;
 use App\Domain\Model\Race\Race;
@@ -12,23 +12,23 @@ use App\Domain\Model\Race\Race;
 final class HorseDao extends BaseDao
 {
 
-    public function addHorse(RunningHorse $runningHorse)
+    public function addHorse(HorseRun $horseRun)
     {
         $sql = 'INSERT INTO horses (horse_id, speed, strength, endurance)
                 VALUES (:horse_id, :speed, :strength, :endurance)';
 
         $data = [
-            'horse_id'  => $runningHorse->horse()->id()->value(),
-            'speed'     => $runningHorse->horse()->stats()->speed()->distance()->value(),
-            'strength'  => $runningHorse->horse()->stats()->strength()->value(),
-            'endurance' => $runningHorse->horse()->stats()->endurance()->value()
+            'horse_id'  => $horseRun->horse()->id()->value(),
+            'speed'     => $horseRun->horse()->stats()->speed()->distance()->value(),
+            'strength'  => $horseRun->horse()->stats()->strength()->value(),
+            'endurance' => $horseRun->horse()->stats()->endurance()->value()
         ];
 
         $this->db()->prepare($sql)->execute($data);
     }
 
     // TODO: Tabela "races" chyba nie jest potrzebna
-    public function getRunningHorse(HorseId $id): RunningHorse
+    public function getHorseRun(HorseId $id): HorseRun
     {
         $sql = 'SELECT r.*, h.*
                   FROM horses h
@@ -40,7 +40,7 @@ final class HorseDao extends BaseDao
         $stmt = $this->db()->prepare($sql);
         $stmt->execute([$id]);
 
-        return RunningHorse::create($stmt->fetch());
+        return HorseRun::create($stmt->fetch());
     }
 
     public function getHorse(HorseId $id): Horse
@@ -53,7 +53,7 @@ final class HorseDao extends BaseDao
     }
 
     // TODO: implement proper sql query
-    public function getBestRunningHorseEver()
+    public function getBestHorseRunEver()
     {
         $sql = 'SELECT r.*, h.*, rh.*
                   FROM horses h
@@ -79,7 +79,7 @@ final class HorseDao extends BaseDao
         return $this->db()->query($sql)->fetchAll();
     }
 
-    public function updateHorseProgress(Race $race, RunningHorse $horse): void
+    public function updateHorseProgress(Race $race, HorseRun $horse): void
     {
         $sql = 'UPDATE races_horses
                    SET distance_covered = :distance_covered,
