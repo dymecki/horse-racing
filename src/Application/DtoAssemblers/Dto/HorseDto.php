@@ -13,6 +13,5 @@ final class HorseDto
     public $endurance;
     public $distanceCovered;
     public $time;
-    public $fullSpeedDistance;
     public $position;
 }
