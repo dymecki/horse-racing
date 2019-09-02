@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<psalm
+    name="Race Horsing psalm analysis"
+    totallyTyped="true"
+    resolveFromConfigFile="true"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+>
+    <projectFiles>
+        <directory name="src" />
+
+        <ignoreFiles>
+            <directory name="vendor" />
+            <directory name="src/Views" />
+        </ignoreFiles>
+    </projectFiles>
+
+    <issueHandlers>
+        <LessSpecificReturnType errorLevel="info" />
+    </issueHandlers>
+</psalm>
+
+<!--
+
+vendor/bin/psalm
+    -threads=4
+    -show-info=true
+    -show-snippet=true
+    -find-dead-code=true
+    -output-format=checkstyle
+    -report=reports/psalm-report.xml
+
+-->
