@@ -9,6 +9,9 @@ use App\Persistence\Dao\HorseDao;
 use App\Domain\Model\Horse\HorseId;
 use App\Domain\Model\Horse\Horse;
 use App\Domain\Model\Race\RunningHorse;
+use App\Persistence\Dao\Mappers\HorseMapper;
+use App\Application\DtoAssemblers\HorseDtoAssembler;
+use App\Application\DtoAssemblers\Dto\HorseDto;
 
 final class HorseService
 {
@@ -39,5 +42,15 @@ final class HorseService
     public function getRuningHorse(string $horseId): RunningHorse
     {
         return $this->horse->getRunningHorse(new HorseId($horseId));
+    }
+
+    public function getBestRunningHorseEver()
+    {
+        return $this->getDto($this->horse->getBestRunningHorseEver());
+    }
+
+    private function getDto($horse): HorseDto
+    {
+        return (new HorseDtoAssembler((new HorseMapper($horse))->get()))->writeDto();
     }
 }

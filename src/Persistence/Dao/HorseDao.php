@@ -48,13 +48,25 @@ final class HorseDao extends BaseDao
         $stmt = $this->db()->prepare('SELECT * FROM horses WHERE horse_id = ? LIMIT 1');
         $stmt->execute([$id]);
 
-        return Horse::create($stmt->fetch());
+//        return Horse::create($stmt->fetch());
+        return $stmt->fetch();
     }
 
     // TODO: implement proper sql query
-    public function getBestEverHorse()
+    public function getBestRunningHorseEver()
     {
-        return $this->db()->query('SELECT * FROM horses LIMIT 1')->fetch();
+        $sql = 'SELECT r.*, h.*, rh.*
+                  FROM horses h
+                  JOIN races_horses rh USING(horse_id)
+                  JOIN races r         USING(race_id)
+                 -- WHERE rh.distance_covered >= r.distance
+                 ORDER BY rh."distance_covered" DESC
+                 LIMIT 1';
+
+        $stmt = $this->db()->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetch();
     }
 
     public function getAll(): array

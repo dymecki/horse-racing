@@ -29,7 +29,7 @@ final class RunningHorse
             RunningHorseStats::create(
                 (float) $data->distance_covered,
                 $data->time,
-                $data->horse_position
+                $data->horse_position ?? 0
             )
         );
     }
