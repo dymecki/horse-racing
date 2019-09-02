@@ -61,27 +61,9 @@ final class RaceDao extends BaseDao
             )->fetchAll(\PDO::FETCH_GROUP);
     }
 
-    public function getRaceHorses(string $raceId)
-    {
-        $stmt = $this->db()->prepare(
-            'SELECT rh.horse_id,
-                    p.distance_covered,
-                    "time"
-               FROM races_horses rh
-
-               JOIN progress p ON p.race_id = r.race_id
-
-              WHERE rh.race_id = ?'
-        );
-
-        $stmt->execute([$raceId]);
-
-        return $stmt->fetchAll();
-    }
-
     public function updateRaceProgress(Race $race)
     {
-        foreach ($race->horses() as $horse) {
+        foreach ($race->runningHorses() as $horse) {
             $this->horse->updateHorseProgress($race, $horse);
         }
     }
@@ -94,7 +76,7 @@ final class RaceDao extends BaseDao
             ->prepare('INSERT INTO races (race_id, distance) VALUES(?, ?)')
             ->execute([$race->id(), $race->distance()->value()]);
 
-        $horses = $race->horses();
+        $horses = $race->runningHorses();
 
         foreach ($horses as $horse) {
             $this->horse->addHorse($horse);
@@ -102,20 +84,37 @@ final class RaceDao extends BaseDao
             $this->db()
                 ->prepare('INSERT INTO races_horses (race_id, horse_id) VALUES(?, ?)')
                 ->execute([$race->id(), $horse->horse()->id()]);
-
-            $this->horse->addNewProgress($race, $horse->horse());
         }
 
         $this->db()->commit();
     }
 
-    public function getAll()
-    {
-        return $this->db()->query('SELECT * FROM races ORDER BY created_at DESC')->fetchAll();
-    }
-
+    // TODO: Add propersql query
     public function countActiveRaces(): int
     {
         return $this->db()->query('SELECT count(*) FROM races')->fetch()->count;
+    }
+
+    // TODO: Limit to last 5 races
+    public function getLastRacesBestPositions(int $racesAmount = 5)
+    {
+        $stmt = $this->db()
+            ->prepare('
+            SELECT *
+            FROM (
+                 SELECT rh.*,
+                        ROW_NUMBER() OVER (
+                            PARTITION BY race_id
+                            ORDER by distance_covered desc
+                        ) rownumber
+                  FROM  races_horses rh
+            ) tmp
+            JOIN races r ON tmp.race_id = r.race_id
+            JOIN horses h ON tmp.horse_id = h.horse_id
+            WHERE rownumber <= 3
+                ');
+        $stmt->execute([$racesAmount]);
+        
+        return $stmt->fetchAll(\PDO::FETCH_GROUP);
     }
 }
