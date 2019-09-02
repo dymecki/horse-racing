@@ -13,7 +13,7 @@ final class HorseId
     public function __construct(string $id)
     {
         if (!$id) {
-            throw new InvalidArgumentException('Horse id cannot be negative');
+            throw new \InvalidArgumentException('Horse id cannot be negative');
         }
 
         $this->id = $id;

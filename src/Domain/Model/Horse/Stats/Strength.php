@@ -11,7 +11,7 @@ final class Strength
     public function __construct(float $strength)
     {
         if ($strength < 0 || $strength > 10) {
-            throw new InvalidArgumentException('Strength value must be in range of 0.0 - 10.0');
+            throw new \InvalidArgumentException('Strength value must be in range of 0.0 - 10.0');
         }
 
         $this->strength = $strength;

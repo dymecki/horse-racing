@@ -13,7 +13,7 @@ final class RaceId
     public function __construct(string $id)
     {
         if (!$id) {
-            throw new InvalidArgumentException('Race id cannot be negative');
+            throw new \InvalidArgumentException('Race id cannot be negative');
         }
 
         $this->id = $id;

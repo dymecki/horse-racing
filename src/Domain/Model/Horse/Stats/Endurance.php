@@ -11,7 +11,7 @@ final class Endurance
     public function __construct(float $endurance)
     {
         if ($endurance < 0 || $endurance > 10) {
-            throw new InvalidArgumentException('Endurance value must be in range of 0.0 - 10.0');
+            throw new \InvalidArgumentException('Endurance value must be in range of 0.0 - 10.0');
         }
 
         $this->endurance = $endurance;
