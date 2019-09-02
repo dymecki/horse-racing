@@ -17,7 +17,7 @@ final class Strength
         $this->strength = $strength;
     }
 
-    public function value()
+    public function value(): float
     {
         return $this->strength;
     }

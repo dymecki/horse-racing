@@ -31,6 +31,6 @@ final class RunningHorseInternalState
 
     public function __toString()
     {
-        return json_encode($this->data(), JSON_PRETTY_PRINT);
+        return (string) json_encode($this->data(), JSON_PRETTY_PRINT);
     }
 }
