@@ -18,6 +18,8 @@
 
     <issueHandlers>
         <LessSpecificReturnType errorLevel="info" />
+        <MissingPropertyType errorLevel="suppress" />
+        <MissingConstructor errorLevel="suppress" />
     </issueHandlers>
 </psalm>
 
