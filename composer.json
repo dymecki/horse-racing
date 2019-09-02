@@ -21,6 +21,7 @@
         "phpunit/phpunit": "^8.3",
         "jc21/clitable": "^1.2",
         "vimeo/psalm": "^3.4",
-        "phpstan/phpstan": "^0.11.15"
+        "phpstan/phpstan": "^0.11.15",
+        "phan/phan": "^2.2"
     }
 }
