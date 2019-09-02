@@ -4,28 +4,23 @@ declare(strict_types = 1);
 
 namespace App\Persistence\Connection;
 
-use App\Persistence\Connection\DbCredentialsFactory;
-
 final class DbCredentials
 {
     private $host;
     private $name;
     private $user;
     private $password;
-    private $charset;
 
     public function __construct(
         string $host,
         string $name,
         string $user,
-        string $password,
-        string $charset
+        string $password
     ){
         $this->host     = $host;
         $this->name     = $name;
         $this->user     = $user;
         $this->password = $password;
-        $this->charset  = $charset;
     }
 
     public function user(): string
@@ -55,12 +50,16 @@ final class DbCredentials
 
     public function dsn(): string
     {
-        return $this->driver() . ':host=' . DbCredentialsFactory::HOST . ';dbname=' . DbCredentialsFactory::NAME;
+        return \sprintf(
+            '%s:host=%s;dbname=%s',
+            $this->driver(),
+            $this->host(),
+            $this->name()
+        );
     }
 
     public function __toString()
     {
         return $this->dsn();
     }
-
 }

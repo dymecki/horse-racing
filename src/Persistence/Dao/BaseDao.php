@@ -12,17 +12,11 @@ abstract class BaseDao
 
     public function __construct()
     {
-        $this->db = Db::instance();
+        $this->db = Db::instance()->connection();
     }
 
-    public function db(): Db
+    public function db(): \PDO
     {
         return $this->db;
     }
-
-    public function name(): string
-    {
-        return \get_class($this);
-    }
-
 }
