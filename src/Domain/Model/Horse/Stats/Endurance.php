@@ -29,6 +29,6 @@ final class Endurance
 
     public function __toString()
     {
-        return (string) $this->endurance;
+        return number_format($this->endurance, 1);
     }
 }

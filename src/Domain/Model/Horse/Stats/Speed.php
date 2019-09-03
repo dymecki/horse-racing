@@ -20,7 +20,7 @@ final class Speed
     public static function init(float $distance): self
     {
         return new self(
-            new Distance($distance),
+            new Distance($distance + self::BASE_SPEED),
             new Seconds(1)
         );
     }
@@ -50,6 +50,6 @@ final class Speed
 
     public function __toString()
     {
-        return sprintf('%s / %s', $this->distance, $this->time);
+        return number_format($this->distance->value(), 1);
     }
 }

@@ -24,6 +24,6 @@ final class Strength
 
     public function __toString()
     {
-        return (string) $this->strength;
+        return number_format($this->strength, 1);
     }
 }
