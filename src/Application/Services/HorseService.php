@@ -51,6 +51,10 @@ final class HorseService
 
     private function getDto($horse): HorseDto
     {
+        if (!$horse) {
+            return new HorseDto();
+        }
+
         return (new HorseDtoAssembler((new HorseMapper($horse))->get()))->writeDto();
     }
 }
