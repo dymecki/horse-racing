@@ -22,7 +22,7 @@ final class RaceDtoAssembler
         $dto->id       = $this->race->id()->value();
         $dto->distance = $this->race->distance()->value();
         $dto->name     = $this->race->name();
-        $dto->time     = $this->race->time()->value();
+        $dto->time     = $this->race->time()->formatted();
 
         foreach ($this->race->horseRuns() as $horse) {
             $dto->horseRuns[] = (new HorseDtoAssembler($horse))->writeDto();

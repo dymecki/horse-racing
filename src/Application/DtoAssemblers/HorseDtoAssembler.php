@@ -27,7 +27,7 @@ final class HorseDtoAssembler
         $dto->strength        = (string) $hr->horse()->stats()->strength();
         $dto->endurance       = (string) $hr->horse()->stats()->endurance();
         $dto->distanceCovered = $hr->stats()->distanceCovered()->value();
-        $dto->time            = $hr->stats()->time()->value();
+        $dto->time            = $hr->stats()->time()->formatted();
         $dto->position        = $hr->stats()->position()->value();
 
         return $dto;

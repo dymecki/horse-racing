@@ -27,6 +27,11 @@ final class Seconds
         return new self($this->seconds + $seconds);
     }
 
+    public function formatted(): string
+    {
+        return gmdate('H:i:s', (int) $this->seconds);
+    }
+
     public function __toString()
     {
         return (string) $this->seconds;
