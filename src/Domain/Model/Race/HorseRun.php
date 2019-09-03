@@ -44,6 +44,7 @@ final class HorseRun
         return $this->stats;
     }
 
+    // TODO: metoda nieużywana
     public function move(): void
     {
         $this->stats->increaseDistance($this->speed()->distance());
@@ -76,9 +77,9 @@ final class HorseRun
         $this->stats->increase($runDistance, $seconds);
     }
 
-    public function isStillGoing(int $raceDistance): bool
+    public function isStillGoing(Distance $raceDistance): bool
     {
-        return $this->stats->distanceCovered()->value() < $raceDistance;
+        return $this->stats->distanceCovered()->isLessThan($raceDistance);
     }
 
     private function slowSpeed(): Speed

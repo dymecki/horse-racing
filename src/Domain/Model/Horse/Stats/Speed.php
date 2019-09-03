@@ -28,11 +28,12 @@ final class Speed
     public function subtract(float $delta): self
     {
         return new self(
-            new Distance($this->distance->value() - self::BASE_SPEED - $delta),
+            new Distance($this->distance->value() - $delta),
             $this->time
         );
     }
 
+    // TODO: metoda niepotrzebna
     public function secondsPerMeter(): Seconds
     {
         return new Seconds($this->time->value() / $this->distance->value());
@@ -50,6 +51,6 @@ final class Speed
 
     public function __toString()
     {
-        return number_format($this->distance->value(), 1);
+        return number_format($this->distance->value() - self::BASE_SPEED, 1);
     }
 }
