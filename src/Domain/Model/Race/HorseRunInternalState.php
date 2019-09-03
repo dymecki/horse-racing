@@ -15,17 +15,22 @@ final class HorseRunInternalState
 
     public function data(): array
     {
-        $horse  = $this->horse;
+        $run             = $this->horse;
+        $speed           = $run->speed();
+        $secondsPerMeter = $speed->time()->value() / $speed->distance()->value();
+        $metersPerSecond = $speed->distance()->value() / $speed->time()->value();
 
         return [
-            'id'                => $horse->horse()->id(),
-            'speed'             => $horse->horse()->stats()->speed(),
-            'strength'          => $horse->horse()->stats()->strength(),
-            'endurance'         => $horse->horse()->stats()->endurance(),
-            'distance'          => $horse->stats()->distanceCovered(),
-            'fullSpeedDistance' => $horse->fullSpeedDistance(),
-            'time'              => $horse->stats()->time(),
-            'secondsPerMeter'   => $horse->horse()->stats()->speed()->secondsPerMeter()
+            'id'                => $run->horse()->id()->value(),
+            'speed'             => $run->speed()->distance()->value(),
+            'strength'          => $run->horse()->stats()->strength()->value(),
+            'endurance'         => $run->horse()->stats()->endurance()->value(),
+            'distance_covered'  => $run->stats()->distanceCovered()->value(),
+            'fullSpeedDistance' => $run->fullSpeedDistance()->value() . ' m',
+            'time'              => $run->stats()->time()->value(),
+            'secondsPerMeter'   => number_format($secondsPerMeter, 2),
+            'metersPerSecond'   => $metersPerSecond,
+            'isTired'           => $run->isTired()
         ];
     }
 
