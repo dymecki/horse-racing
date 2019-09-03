@@ -51,9 +51,16 @@ final class RaceDao extends BaseDao
                        rh."time",
                        ROW_NUMBER() OVER(PARTITION BY r.race_id ORDER BY rh.distance_covered DESC) horse_position
                   FROM races r
+
+                  JOIN (SELECT r.race_id AS rid
+                          FROM races_horses rh
+                          JOIN races r USING(race_id)
+                         WHERE rh.distance_covered < r.distance
+                         GROUP BY r.race_id) selected_races
+                    ON selected_races.rid = r.race_id
+
                   JOIN races_horses rh USING(race_id)
-                  JOIN horses h        USING(horse_id)
-                 WHERE rh.distance_covered < r.distance';
+                  JOIN horses h        USING(horse_id)';
 
         return $this->db()->query($sql)->fetchAll(\PDO::FETCH_GROUP);
     }
