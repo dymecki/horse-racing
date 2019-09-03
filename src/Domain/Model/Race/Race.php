@@ -44,8 +44,12 @@ final class Race
 
     public function runForSeconds(int $seconds): void
     {
-        foreach ($this->horseRuns as $horse) {
-            $horse->runForSeconds($seconds);
+        foreach ($this->horseRuns as $horseRun) {
+            if (!$horseRun->isStillGoing($this->distance)) {
+                continue;
+            }
+
+            $horseRun->runForSeconds($seconds);
         }
     }
 
