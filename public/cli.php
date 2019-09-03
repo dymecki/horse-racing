@@ -3,57 +3,40 @@
 declare(strict_types = 1);
 
 require_once '../vendor/autoload.php';
+include_once '../bootstrap.php';
 
-use App\Domain\Model\Race\RaceFactory;
-use App\Domain\Model\Horse\HorseFactory;
 use App\Views\RunningHorsesConsole;
-use App\Persistence\Dao\RaceDao;
-use App\Persistence\Dao\HorseDao;
-use App\Domain\Model\Race\RunningHorseInternalState;
+use App\Domain\Model\Race\HorseRunInternalState;
+use App\Domain\Model\Horse\Horse;
+use App\Domain\Model\Horse\HorseId;
+use App\Domain\Model\Horse\Stats\HorseStats;
+use App\Domain\Model\Race\Stats\HorseRunStats;
+use App\Domain\Model\Race\HorseRun;
 
-$raceDao  = new RaceDao();
-$horseDao = new HorseDao();
+$data      = [];
+$endurance = 0.35;
 
-$race  = RaceFactory::make();
-$runningHorse = HorseFactory::make();
 
-//$raceDao->addRace($race);
-//$horseDao->addHorse($horse);
+//$horse = new Horse(
+//    HorseId::init(),
+//    HorseStats::create(2.0, 2.0, $endurance)
+//);
+//
+//$horseRun = new HorseRun($horse, HorseRunStats::start());
+//$horseRun->runForSeconds(5);
+//exit;
 
-$racing = [];
 
-while ($runningHorse->isStillRunning(1500)) {
-    $runningHorse->moveByTime();
-    $racing[] = (new RunningHorseInternalState($runningHorse))->data();
+for ($i = 1; $i < 11; $i++) {
+    $horse = new Horse(
+        HorseId::init(),
+        HorseStats::create(2.0, 2.0, $endurance)
+    );
+
+    $horseRun = new HorseRun($horse, HorseRunStats::start());
+    $horseRun->runForSeconds($i);
+
+    $data[] = (new HorseRunInternalState($horseRun))->data();
 }
 
-$console = new RunningHorsesConsole($racing);
-$console->render();
-exit;
-
-$runningHorse->runForSeconds(10);
-$console = new RunningHorsesConsole([$runningHorse]);
-$console->render();
-exit;
-
-for ($i = 0; $i < 5; $i++) {
-    $console = new RunningHorsesConsole([$runningHorse]);
-    $console->render();
-    $runningHorse->move();
-}
-
-//$console = new RunningHorsesConsole([$horse]);
-//$console->render();
-exit;
-
-
-$step = 1;
-
-while ($step < 3) {
-    $race->moveHorses();
-
-    echo 'Step: ' . $step . "\n";
-    $console = new RunningHorsesConsole($race->horses());
-    $console->render();
-    $step++;
-}
+(new RunningHorsesConsole($data))->render();

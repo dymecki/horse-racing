@@ -64,22 +64,21 @@ final class HorseRun
 
     public function runForSeconds(int $seconds): void
     {
-        $runDistance     = new Distance();
+        $tmpDistance     = new Distance();
         $distanceCovered = $this->stats->distanceCovered();
 
         for ($i = 0; $i < $seconds; $i++) {
-//            $delta       = $this->checkIfTired($runDistance) ? $this->slowSpeed()->distance() : $this->horse->stats()->speed()->distance();
-            $delta           = $this->checkIfTired($distanceCovered) ? $this->slowSpeed()->distance() : $this->horse->stats()->speed()->distance();
-            $runDistance     = $runDistance->withAdd($delta);
-            $distanceCovered = $distanceCovered->withAdd($runDistance);
+            $oneSecondDistance = $this->checkIfTired($distanceCovered) ? $this->slowSpeed()->distance() : $this->horse->stats()->speed()->distance();
+            $tmpDistance       = $tmpDistance->withAdd($oneSecondDistance);
+            $distanceCovered   = $distanceCovered->withAdd($oneSecondDistance);
         }
 
-        $this->stats->increase($runDistance, $seconds);
+        $this->stats->increase($tmpDistance, $seconds);
     }
 
     public function isStillGoing(Distance $raceDistance): bool
     {
-        return $this->stats->distanceCovered()->isLessThan($raceDistance);
+        return $this->stats->distanceCovered() < $raceDistance;
     }
 
     private function slowSpeed(): Speed
@@ -92,12 +91,12 @@ final class HorseRun
         return 5 * $this->horse->stats()->strength()->value() * 8 / 100;
     }
 
-    private function checkIfTired(Distance $distance): bool
+    private function checkIfTired(Distance $distanceCovered): bool
     {
-        return $this->fullSpeedDistance()->isLessThan($distance);
+        return $distanceCovered > $this->fullSpeedDistance();
     }
 
-    private function isTired(): bool
+    public function isTired(): bool
     {
         return $this->checkIfTired($this->stats()->distanceCovered());
     }

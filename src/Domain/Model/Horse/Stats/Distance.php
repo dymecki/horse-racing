@@ -32,11 +32,6 @@ final class Distance
         return new self($this->distance + $distance->value());
     }
 
-    public function isLessThan(self $distance): bool
-    {
-        return $this->distance < $distance->value();
-    }
-
     public function __toString()
     {
         return (string) $this->distance;
