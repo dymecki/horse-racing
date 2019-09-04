@@ -11,7 +11,7 @@ final class Speed
     private $distance;
     private $time;
 
-    private function __construct(Distance $distance, Seconds $time)
+    private function __construct(Distance $distance, Time $time)
     {
         $this->distance = $distance;
         $this->time     = $time;
@@ -25,7 +25,7 @@ final class Speed
 
         return new self(
             new Distance($distance + self::BASE_SPEED),
-            new Seconds(1)
+            new Time(1)
         );
     }
 
@@ -42,7 +42,7 @@ final class Speed
         return $this->distance;
     }
 
-    public function time(): Seconds
+    public function time(): Time
     {
         return $this->time;
     }

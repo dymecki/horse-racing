@@ -6,7 +6,7 @@ namespace App\Domain\Model\Race;
 
 use App\Domain\Model\Horse\Stats\Distance;
 use App\Domain\Model\Race\RaceId;
-use App\Domain\Model\Horse\Stats\Seconds;
+use App\Domain\Model\Horse\Stats\Time;
 
 final class Race
 {
@@ -71,9 +71,9 @@ final class Race
         return $horseRun->stats()->distanceCovered() < $this->distance;
     }
 
-    public function time(): Seconds
+    public function time(): Time
     {
-        return isset($this->horseRuns[0]) ? $this->horseRuns[0]->stats()->time() : new Seconds(0);
+        return isset($this->horseRuns[0]) ? $this->horseRuns[0]->stats()->time() : new Time(0);
     }
 
     public function id(): RaceId

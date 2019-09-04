@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Domain\Model\Horse\Stats;
 
-final class Seconds
+final class Time
 {
     private $seconds;
 

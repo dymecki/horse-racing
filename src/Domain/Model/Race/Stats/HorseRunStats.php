@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace App\Domain\Model\Race\Stats;
 
 use App\Domain\Model\Horse\Stats\Distance;
-use App\Domain\Model\Horse\Stats\Seconds;
+use App\Domain\Model\Horse\Stats\Time;
 
 final class HorseRunStats
 {
@@ -13,7 +13,7 @@ final class HorseRunStats
     private $time;
     private $position;
 
-    private function __construct(Distance $distance, Seconds $time, Position $position)
+    private function __construct(Distance $distance, Time $time, Position $position)
     {
         $this->distanceCovered = $distance;
         $this->time            = $time;
@@ -24,7 +24,7 @@ final class HorseRunStats
     {
         return new self(
             new Distance($distance),
-            new Seconds($time),
+            new Time($time),
             new Position($position)
         );
     }
@@ -32,7 +32,7 @@ final class HorseRunStats
     public function update(Distance $distance, float $seconds): void
     {
         $this->distanceCovered = $distance;
-        $this->time            = new Seconds($seconds);
+        $this->time            = new Time($seconds);
     }
 
     public function distanceCovered(): Distance
@@ -40,7 +40,7 @@ final class HorseRunStats
         return $this->distanceCovered;
     }
 
-    public function time(): Seconds
+    public function time(): Time
     {
         return $this->time;
     }
