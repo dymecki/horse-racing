@@ -20,11 +20,6 @@ final class RaceService
         $this->race  = new RaceDao();
     }
 
-    public function getById(string $raceId)
-    {
-        return $this->getDto([$this->race->getById($raceId)]);
-    }
-
     public function canAddNewRace(): bool
     {
         return $this->race->countActiveRaces() < self::MAX_RACES_AMOUNT;
@@ -43,11 +38,6 @@ final class RaceService
     {
         return $this->getDto($this->race->getActiveRaces());
     }
-
-//    public function getAllRaces()
-//    {
-//        return $this->race->getAll();
-//    }
 
     public function getLastRacesBestPositions(): array
     {
