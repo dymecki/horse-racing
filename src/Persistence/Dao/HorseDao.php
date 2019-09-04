@@ -5,78 +5,46 @@ declare(strict_types = 1);
 namespace App\Persistence\Dao;
 
 use App\Domain\Model\Race\HorseRun;
-use App\Domain\Model\Horse\HorseId;
 use App\Domain\Model\Horse\Horse;
 use App\Domain\Model\Race\Race;
 
 final class HorseDao extends BaseDao
 {
-
-    public function addHorse(HorseRun $horseRun)
+    public function addHorse(Horse $horse): void
     {
         $sql = 'INSERT INTO horses (horse_id, speed, strength, endurance)
                 VALUES (:horse_id, :speed, :strength, :endurance)';
 
         $data = [
-            'horse_id'  => $horseRun->horse()->id()->value(),
-            'speed'     => $horseRun->horse()->stats()->speed()->distance()->value(),
-            'strength'  => $horseRun->horse()->stats()->strength()->value(),
-            'endurance' => $horseRun->horse()->stats()->endurance()->value()
+            'horse_id'  => $horse()->id()->value(),
+            'speed'     => $horse()->stats()->speed()->distance()->value(),
+            'strength'  => $horse()->stats()->strength()->value(),
+            'endurance' => $horse()->stats()->endurance()->value()
         ];
 
         $this->db()->prepare($sql)->execute($data);
     }
 
-    // TODO: Tabela "races" chyba nie jest potrzebna
-    public function getHorseRun(HorseId $id): HorseRun
+    public function getBestHorseRunEver(): \stdClass
     {
-        $sql = 'SELECT r.*, h.*
+        $sql = 'SELECT h.horse_id,
+                       r.distance "Race distance",
+                       h.speed,
+                       h.strength,
+                       h.endurance,
+                       rh.distance_covered,
+                       rh."time"
                   FROM horses h
                   JOIN races_horses rh USING(horse_id)
                   JOIN races r         USING(race_id)
-                 WHERE h.horse_id = ?
-                 LIMIT 1';
-
-        $stmt = $this->db()->prepare($sql);
-        $stmt->execute([$id]);
-
-        return HorseRun::create($stmt->fetch());
-    }
-
-    public function getHorse(HorseId $id): Horse
-    {
-        $stmt = $this->db()->prepare('SELECT * FROM horses WHERE horse_id = ? LIMIT 1');
-        $stmt->execute([$id]);
-
-//        return Horse::create($stmt->fetch());
-        return $stmt->fetch();
-    }
-
-    // TODO: implement proper sql query
-    public function getBestHorseRunEver()
-    {
-        $sql = 'SELECT r.*, h.*, rh.*
-                  FROM horses h
-                  JOIN races_horses rh USING(horse_id)
-                  JOIN races r         USING(race_id)
-                 -- WHERE rh.distance_covered >= r.distance
-                 ORDER BY rh."distance_covered" DESC
+                 WHERE rh.distance_covered = r.distance
+                 ORDER BY rh."time" ASC
                  LIMIT 1';
 
         $stmt = $this->db()->prepare($sql);
         $stmt->execute();
 
         return $stmt->fetch();
-    }
-
-    public function getAll(): array
-    {
-        $sql = 'SELECT r.*, h.*, rh.*
-                       FROM horses h
-                       JOIN races_horses rh USING(horse_id)
-                       JOIN races r         USING(race_id)';
-
-        return $this->db()->query($sql)->fetchAll();
     }
 
     public function updateHorseProgress(Race $race, HorseRun $horse): void

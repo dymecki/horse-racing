@@ -6,6 +6,7 @@ namespace App\Persistence\Dao;
 
 use App\Domain\Model\Race\Race;
 use App\Persistence\Dao\HorseDao;
+use App\Domain\Model\Race\HorseRun;
 
 final class RaceDao extends BaseDao
 {
@@ -18,27 +19,10 @@ final class RaceDao extends BaseDao
         $this->horse = new HorseDao();
     }
 
-    public function getById(string $raceId)
-    {
-        $sql = 'SELECT r.race_id,
-                       r.distance,
-                       h.horse_id,
-                       h.speed,
-                       h.strength,
-                       h.endurance,
-                       rh.distance_covered,
-                       rh."time"
-                  FROM races r
-                  JOIN races_horses rh USING(race_id)
-                  JOIN horses h        USING(horse_id)
-                 WHERE r.race_id = ?';
-
-        $stmt = $this->db()->prepare($sql);
-        $stmt->execute([$raceId]);
-
-        return $stmt->fetch();
-    }
-
+    /**
+     *
+     * @return \stdClass[]
+     */
     public function getActiveRaces(): array
     {
         $sql = 'SELECT r.race_id,
@@ -49,30 +33,24 @@ final class RaceDao extends BaseDao
                        h.endurance,
                        rh.distance_covered,
                        rh."time",
-                       ROW_NUMBER() OVER(PARTITION BY r.race_id ORDER BY rh.distance_covered DESC) horse_position
+                       ROW_NUMBER() OVER(PARTITION BY r.race_id
+                                         ORDER BY rh.distance_covered DESC) horse_position
                   FROM races r
-
-                  JOIN (SELECT r.race_id AS rid
-                          FROM races_horses rh
-                          JOIN races r USING(race_id)
-                         WHERE rh.distance_covered < r.distance
-                         GROUP BY r.race_id) selected_races
-                    ON selected_races.rid = r.race_id
-
-                  JOIN races_horses rh USING(race_id)
-                  JOIN horses h        USING(horse_id)';
+                  JOIN active_races_view USING(race_id)
+                  JOIN races_horses rh   USING(race_id)
+                  JOIN horses h          USING(horse_id)';
 
         return $this->db()->query($sql)->fetchAll(\PDO::FETCH_GROUP);
     }
 
-    public function updateRaceProgress(Race $race)
+    public function updateRaceProgress(Race $race): void
     {
         foreach ($race->horseRuns() as $horse) {
             $this->horse->updateHorseProgress($race, $horse);
         }
     }
 
-    public function addRace(Race $race)
+    public function addRace(Race $race): void
     {
         $this->db()->beginTransaction();
 
@@ -80,10 +58,11 @@ final class RaceDao extends BaseDao
             ->prepare('INSERT INTO races (race_id, distance) VALUES(?, ?)')
             ->execute([$race->id(), $race->distance()->value()]);
 
-        $horses = $race->horseRuns();
+        $horseRuns = $race->horseRuns();
 
-        foreach ($horses as $horse) {
-            $this->horse->addHorse($horse);
+        /* @var $horseRuns HorseRun[] */
+        foreach ($horseRuns as $horseRun) {
+            $this->horse->addHorse($horseRun->horse());
 
             $this->db()
                 ->prepare('INSERT INTO races_horses (race_id, horse_id) VALUES(?, ?)')
@@ -93,39 +72,36 @@ final class RaceDao extends BaseDao
         $this->db()->commit();
     }
 
-    // TODO: Add propersql query
     public function countActiveRaces(): int
     {
-        $sql = 'SELECT count(*)
-                  FROM races r
-                  JOIN races_horses rh USING(race_id)
-               -- JOIN horses h        USING(horse_id)
-                 WHERE rh.distance_covered < r.distance';
+        $sql = 'SELECT count(*) FROM active_races_view';
 
         return (int) $this->db()->query($sql)->fetch()->count;
     }
 
+    /**
+     *
+     * @return \stdClass[]
+     */
     public function getLastRacesBestPositions(): array
     {
         $sql = 'SELECT tmp.*,
-                       distance,
                        speed,
                        strength,
                        endurance
-
                   FROM (SELECT race_id,
                                horse_id,
+                               distance,
                                distance_covered,
                                "time",
-                               RANK() OVER (PARTITION BY race_id ORDER BY rh.distance_covered desc) horse_position,
-                               DENSE_RANK() OVER (ORDER BY race_id) partition_number
-                          FROM races_horses rh) tmp
-
-                  JOIN races r  USING(race_id)
+                               DENSE_RANK() OVER (ORDER BY r.created_at DESC) partition_number,
+                               ROW_NUMBER() OVER (PARTITION BY race_id ORDER BY "time" ASC) horse_position
+                          FROM races_horses rh
+                          JOIN races r USING(race_id)
+                         WHERE rh.distance_covered >= r.distance) tmp
                   JOIN horses h USING(horse_id)
-                 WHERE horse_position <= 3
-                   AND partition_number <= 5
-                 ORDER BY r.race_id, tmp.horse_position ASC';
+                 WHERE horse_position <= 3 AND partition_number <= 5
+                 ORDER BY partition_number ASC, horse_position ASC';
 
         $stmt = $this->db()->prepare($sql);
         $stmt->execute();

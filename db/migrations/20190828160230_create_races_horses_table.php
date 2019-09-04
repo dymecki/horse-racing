@@ -12,7 +12,7 @@ class CreateRacesHorsesTable extends AbstractMigration
             ->addColumn('race_id', 'uuid')
             ->addColumn('horse_id', 'uuid')
             ->addColumn('distance_covered', 'decimal', ['default' => 0, 'precision' => 6, 'scale' => 2])
-            ->addColumn('time', 'integer', ['default' => 0])
+            ->addColumn('time', 'decimal', ['default' => 0, 'precision' => 6, 'scale' => 2])
             ->addColumn('created_at', 'timestamp', ['timezone' => true, 'default' => 'CURRENT_TIMESTAMP'])
             ->addColumn('updated_at', 'timestamp', ['timezone' => true, 'null' => true])
             ->addIndex(['race_id', 'horse_id'], ['unique' => true])
