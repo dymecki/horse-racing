@@ -21,6 +21,6 @@ final class HorseFactory
             )
         );
 
-        return new HorseRun($horse, HorseRunStats::start());
+        return new HorseRun($horse, HorseRunStats::create());
     }
 }
