@@ -22,11 +22,6 @@ final class Distance
         return $this->distance;
     }
 
-    public function increaseBySpeed(Speed $speed): self
-    {
-        return new self($this->distance + $speed->distance()->value());
-    }
-
     public function withAdd(Distance $distance): self
     {
         return new self($this->distance + $distance->value());
