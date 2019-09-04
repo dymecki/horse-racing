@@ -49,9 +49,9 @@ final class HorseRun
 
         $time = $forwardTime;
 
-        if ($coveredDistance > $maxDistance) {
-            $time            -= $time * ($coveredDistance - $maxDistance) / $coveredDistance;
-            $coveredDistance = $maxDistance;
+        if ($coveredDistance > $raceDistance) {
+            $time            -= $time * ($coveredDistance - $raceDistance) / $coveredDistance;
+            $coveredDistance = $raceDistance;
         }
 
         $this->stats->update(new Distance($coveredDistance), $time);

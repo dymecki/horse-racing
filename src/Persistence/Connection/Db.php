@@ -48,6 +48,6 @@ final class Db
 
     public function __clone()
     {
-        throw new Exception('Singleton cloning forbidden');
+        throw new \Exception('Singleton cloning forbidden');
     }
 }

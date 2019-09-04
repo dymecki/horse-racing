@@ -11,10 +11,10 @@ final class DbCredentialsFactory
     public static function build(): DbCredentials
     {
         return new DbCredentials(
-            \getenv('DB_HOST'),
-            \getenv('DB_NAME'),
-            \getenv('DB_USER'),
-            \getenv('DB_PASS')
+            (string) \getenv('DB_HOST'),
+            (string) \getenv('DB_NAME'),
+            (string) \getenv('DB_USER'),
+            (string) \getenv('DB_PASS')
         );
     }
 }
