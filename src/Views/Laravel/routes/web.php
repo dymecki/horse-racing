@@ -11,10 +11,6 @@ Route::get('/', function() {
         ->with('bestHorseEver', (new HorseService())->getBestHorseRunEver());
 })->name('index');
 
-Route::get('races/{id}', function($id) {
-    return view('races.show')->with('race', (new RaceService())->getById($id));
-})->name('races.show');
-
 Route::get('progress', function() {
     (new RaceService())->updateRaces();
 
