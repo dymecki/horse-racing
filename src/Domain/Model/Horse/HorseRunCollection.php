@@ -8,6 +8,7 @@ use App\Domain\Model\Race\HorseRun;
 
 final class HorseRunCollection implements \IteratorAggregate
 {
+    /** @var HorseRun */
     private $items;
 
     public function getIterator(): HorseRunIterator
@@ -20,7 +21,7 @@ final class HorseRunCollection implements \IteratorAggregate
         return $this->items[$key] ?? null;
     }
 
-    public function addHorseRun(HorseRun $horseRun)
+    public function addHorseRun(HorseRun $horseRun): void
     {
         $this->items[] = $horseRun;
     }
