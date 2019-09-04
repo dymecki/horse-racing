@@ -8,6 +8,7 @@ use App\Persistence\Connection\Db;
 
 abstract class BaseDao
 {
+    /** @var \PDO */
     protected $db;
 
     public function __construct()

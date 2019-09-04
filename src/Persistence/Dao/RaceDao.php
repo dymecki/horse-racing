@@ -45,9 +45,13 @@ final class RaceDao extends BaseDao
 
     public function updateRaceProgress(Race $race): void
     {
+        $this->db->beginTransaction();
+
         foreach ($race->horseRuns() as $horse) {
             $this->horse->updateHorseProgress($race, $horse);
         }
+
+        $this->db->commit();
     }
 
     public function addRace(Race $race): void
@@ -66,7 +70,7 @@ final class RaceDao extends BaseDao
 
             $this->db()
                 ->prepare('INSERT INTO races_horses (race_id, horse_id) VALUES(?, ?)')
-                ->execute([$race->id(), $horse->horse()->id()]);
+                ->execute([$race->id(), $horseRun->horse()->id()]);
         }
 
         $this->db()->commit();
