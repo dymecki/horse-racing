@@ -40,7 +40,7 @@ final class RaceDao extends BaseDao
                   JOIN races_horses rh   USING(race_id)
                   JOIN horses h          USING(horse_id)';
 
-        return $this->db()->query($sql)->fetchAll(\PDO::FETCH_GROUP);
+        return $this->db->query($sql)->fetchAll(\PDO::FETCH_GROUP);
     }
 
     public function updateRaceProgress(Race $race): void
@@ -56,9 +56,9 @@ final class RaceDao extends BaseDao
 
     public function addRace(Race $race): void
     {
-        $this->db()->beginTransaction();
+        $this->db->beginTransaction();
 
-        $this->db()
+        $this->db
             ->prepare('INSERT INTO races (race_id, distance) VALUES(?, ?)')
             ->execute([$race->id(), $race->distance()->value()]);
 
@@ -68,19 +68,19 @@ final class RaceDao extends BaseDao
         foreach ($horseRuns as $horseRun) {
             $this->horse->addHorse($horseRun->horse());
 
-            $this->db()
+            $this->db
                 ->prepare('INSERT INTO races_horses (race_id, horse_id) VALUES(?, ?)')
                 ->execute([$race->id(), $horseRun->horse()->id()]);
         }
 
-        $this->db()->commit();
+        $this->db->commit();
     }
 
     public function countActiveRaces(): int
     {
         $sql = 'SELECT count(*) FROM active_races_view';
 
-        return (int) $this->db()->query($sql)->fetch()->count;
+        return (int) $this->db->query($sql)->fetch()->count;
     }
 
     /**
@@ -107,7 +107,7 @@ final class RaceDao extends BaseDao
                  WHERE horse_position <= 3 AND partition_number <= 5
                  ORDER BY partition_number ASC, horse_position ASC';
 
-        $stmt = $this->db()->prepare($sql);
+        $stmt = $this->db->prepare($sql);
         $stmt->execute();
 
         return $stmt->fetchAll(\PDO::FETCH_GROUP);

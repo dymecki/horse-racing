@@ -22,7 +22,7 @@ final class HorseDao extends BaseDao
             'endurance' => $horse()->stats()->endurance()->value()
         ];
 
-        $this->db()->prepare($sql)->execute($data);
+        $this->db->prepare($sql)->execute($data);
     }
 
     public function getBestHorseRunEver(): \stdClass
@@ -41,7 +41,7 @@ final class HorseDao extends BaseDao
                  ORDER BY rh."time" ASC
                  LIMIT 1';
 
-        $stmt = $this->db()->prepare($sql);
+        $stmt = $this->db->prepare($sql);
         $stmt->execute();
 
         return $stmt->fetch();
@@ -62,6 +62,6 @@ final class HorseDao extends BaseDao
             'horse_id'         => $horse->horse()->id()
         ];
 
-        $this->db()->prepare($sql)->execute($data);
+        $this->db->prepare($sql)->execute($data);
     }
 }

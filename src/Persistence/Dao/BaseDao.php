@@ -15,9 +15,4 @@ abstract class BaseDao
     {
         $this->db = Db::instance()->connection();
     }
-
-    public function db(): \PDO
-    {
-        return $this->db;
-    }
 }
