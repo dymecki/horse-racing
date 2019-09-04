@@ -40,9 +40,4 @@ final class HorseStats
     {
         return $this->endurance;
     }
-
-    public function __toString()
-    {
-        return sprintf('%s m/s', $this->speed);
-    }
 }
