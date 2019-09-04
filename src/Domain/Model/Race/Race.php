@@ -13,6 +13,8 @@ final class Race
     const ADVANCE_SECONDS = 10;
 
     private $id;
+
+    /** @var HorseRun[] */
     private $horseRuns;
     private $distance;
 
