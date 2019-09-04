@@ -23,7 +23,7 @@ final class Race
         $this->horseRuns = $horseRuns;
     }
 
-    public static function init(int $distance): self
+    public static function init(int $distance = 1500): self
     {
         return new self(RaceId::init(), new Distance($distance), []);
     }

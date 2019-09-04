@@ -29,37 +29,10 @@ final class HorseRunStats
         );
     }
 
-    public static function start(): self
-    {
-        return self::create();
-    }
-
-    public function increase(Distance $distance, float $seconds): void
-    {
-        $this->increaseDistance($distance);
-        $this->increaseTime($seconds);
-    }
-
     public function update(Distance $distance, float $seconds): void
     {
         $this->distanceCovered = $distance;
         $this->time            = new Seconds($seconds);
-    }
-
-    public function increaseTime(float $seconds): void
-    {
-        $this->time = $this->time->withAdd($seconds);
-    }
-
-    public function updateTime(): void
-    {
-        $this->increaseTime(1);
-//        $this->time = $this->time->withAdd(1);
-    }
-
-    public function increaseDistance(Distance $distance): void
-    {
-        $this->distanceCovered = $this->distanceCovered->withAdd($distance);
     }
 
     public function distanceCovered(): Distance

@@ -29,7 +29,7 @@ final class Speed
         );
     }
 
-    public function slowerBy(float $delta): self
+    public function subtract(float $delta): self
     {
         return new self(
             new Distance($this->distance->value() - $delta),
