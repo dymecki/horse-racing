@@ -6,7 +6,7 @@ namespace App\Views;
 
 use jc21\CliTable;
 use jc21\CliTableManipulator;
-use App\Domain\Model\Race\RunningHorseInternalState;
+//use App\Domain\Model\Race\RunningHorseInternalState;
 
 final class RunningHorsesConsole
 {
@@ -31,6 +31,11 @@ final class RunningHorsesConsole
 
     public function render()
     {
+        echo 'Strength: ' . $this->horses[0]['strength'] . "\n";
+        echo 'Endurance: ' . $this->horses[0]['endurance'] . "\n";
+        echo 'Full Speed Distance: ' . $this->horses[0]['fullSpeedDistance'] . "\n";
+        echo "\n";
+
         $table = new CliTable;
         $table->setTableColor('blue');
         $table->setHeaderColor('cyan');
@@ -39,9 +44,9 @@ final class RunningHorsesConsole
         $table->addField('Distance covered', 'distance_covered', false, 'white');
         $table->addField('Is tired', 'isTired', new CliTableManipulator('yesno'), 'white');
         $table->addField('Speed', 'speed', false, 'white');
-        $table->addField('Strength', 'strength', false, 'white');
-        $table->addField('Endurance', 'endurance', false, 'white');
-        $table->addField('Full Speed Distance', 'fullSpeedDistance', false, 'white');
+//        $table->addField('Strength', 'strength', false, 'white');
+//        $table->addField('Endurance', 'endurance', false, 'white');
+//        $table->addField('Full Speed Distance', 'fullSpeedDistance', false, 'white');
         $table->addField('m / s', 'metersPerSecond', false, 'white');
         $table->addField('s / m', 'secondsPerMeter', false, 'white');
         $table->injectData($this->horses);

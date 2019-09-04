@@ -40,6 +40,12 @@ final class HorseRunStats
         $this->increaseTime($seconds);
     }
 
+    public function update(Distance $distance, float $seconds): void
+    {
+        $this->distanceCovered = $distance;
+        $this->time            = new Seconds($seconds);
+    }
+
     public function increaseTime(float $seconds): void
     {
         $this->time = $this->time->withAdd($seconds);

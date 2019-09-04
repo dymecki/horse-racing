@@ -62,18 +62,66 @@ final class HorseRun
         return $this->isTired() ? $this->slowSpeed() : $this->horse->stats()->speed();
     }
 
-    public function runForSeconds(int $seconds): void
+    public function runForSeconds(int $seconds, int $raceDistance = 1500): void
     {
-        $tmpDistance     = new Distance();
-        $distanceCovered = $this->stats->distanceCovered();
+        $this->distanceAlgorithm($seconds, $raceDistance);
+//        exit;
+//
+//        $tmpDistance     = new Distance();
+//        $distanceCovered = $this->stats->distanceCovered();
+//
+////        for ($i = 0; $i < $seconds; $i++) {
+////            $oneSecondDistance = $this->checkIfTired($distanceCovered) ? $this->slowSpeed()->distance() : $this->horse->stats()->speed()->distance();
+////            $tmpDistance       = $tmpDistance->withAdd($oneSecondDistance);
+////            $distanceCovered   = $distanceCovered->withAdd($oneSecondDistance);
+////
+////            if ($distanceCovered->value() >= $raceDistance) {
+////                break;
+////            }
+////        }
+//        // =====================
+//
+//        $counter = 0;
+//
+//        while ($counter < $seconds && $distanceCovered->value() < $raceDistance) {
+//            $oneSecondDistance = $this->checkIfTired($distanceCovered) ? $this->slowSpeed()->distance() : $this->horse->stats()->speed()->distance();
+//            $tmpDistance       = $tmpDistance->withAdd($oneSecondDistance);
+//            $distanceCovered   = $distanceCovered->withAdd($oneSecondDistance);
+//
+//            $counter++;
+//        }
+//
+//        $this->stats->increase($tmpDistance, $seconds);
+    }
 
-        for ($i = 0; $i < $seconds; $i++) {
-            $oneSecondDistance = $this->checkIfTired($distanceCovered) ? $this->slowSpeed()->distance() : $this->horse->stats()->speed()->distance();
-            $tmpDistance       = $tmpDistance->withAdd($oneSecondDistance);
-            $distanceCovered   = $distanceCovered->withAdd($oneSecondDistance);
+    public function distanceAlgorithm($seconds = 10, int $maxDistance = 1500)
+    {
+        $time              = $this->stats->time()->value();
+        $fullSpeedDistance = $this->fullSpeedDistance()->value();
+        $fullSpeed         = $this->horse->stats()->speed()->time()->value();
+        $fullSpeedSeconds  = $fullSpeedDistance / $fullSpeed;
+        $forwardTime       = $time + $seconds;
+
+        if ($forwardTime > $fullSpeedSeconds) {
+            $slowSpeedTime    = $forwardTime - $fullSpeedSeconds;
+            $slowPartDistance = $slowSpeedTime * $this->slowSpeed()->distance()->value();
+            $coveredDistance  = $fullSpeedDistance + $slowPartDistance;
+//            $coveredDistance = $fullSpeedDistance + ($forwardTime - $fullSpeedSeconds) * $this->slowSpeed()->distance()->value();
+        }
+        else {
+            $coveredDistance = $forwardTime * $fullSpeed;
         }
 
-        $this->stats->increase($tmpDistance, $seconds);
+        $time = $forwardTime;
+
+        if ($coveredDistance > $maxDistance) {
+            $diff            = $coveredDistance - $maxDistance;
+            $ratio           = $diff / $coveredDistance;
+            $coveredDistance = $maxDistance;
+            $time            = $time - $time * $ratio;
+        }
+
+        $this->stats->update(new Distance($coveredDistance), $time);
     }
 
     public function isStillGoing(Distance $raceDistance): bool
