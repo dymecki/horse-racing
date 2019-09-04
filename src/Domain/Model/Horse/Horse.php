@@ -43,9 +43,4 @@ final class Horse
     {
         return substr((string) $this->id, 0, 8);
     }
-
-    public function __toString()
-    {
-        return sprintf('%s', $this->id);
-    }
 }
