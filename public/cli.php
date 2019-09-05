@@ -15,7 +15,11 @@ use App\Domain\Model\Race\HorseRun;
 use jc21\CliTable;
 use jc21\CliTableManipulator;
 
-$coveredDistance   = 0;
+var_dump(!(bool) []);
+var_dump(!(bool) [1]);
+exit;
+
+/*$coveredDistance   = 0;
 $maxDistance       = 1500;
 $seconds           = 10;
 $fullSpeed         = 7;    // 7 m/s
@@ -83,7 +87,7 @@ $table->display();
 
 
 
-exit;
+exit;*/
 
 $data      = [];
 $endurance = 2.0;
