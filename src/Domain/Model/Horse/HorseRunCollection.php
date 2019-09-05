@@ -6,10 +6,15 @@ namespace App\Domain\Model\Horse;
 
 use App\Domain\Model\Race\HorseRun;
 
-final class HorseRunCollection implements \IteratorAggregate
+final class HorseRunCollection implements \IteratorAggregate, \Countable
 {
     /** @var HorseRun */
     private $items;
+
+    public function make(HorseRun ...$items)
+    {
+        $this->items = $items;
+    }
 
     public function getIterator(): HorseRunIterator
     {
@@ -26,8 +31,23 @@ final class HorseRunCollection implements \IteratorAggregate
         $this->items[] = $horseRun;
     }
 
-    public function __isset($key): bool
+    public function first(): HorseRun
+    {
+        return $this->items[0];
+    }
+
+    public function isEmpty(): bool
+    {
+        return $this->count() == 0;
+    }
+
+    public function isset($key): bool
     {
         return isset($this->items[$key]);
+    }
+
+    public function count(): int
+    {
+        return count($this->items);
     }
 }
