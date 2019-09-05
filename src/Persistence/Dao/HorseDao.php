@@ -16,10 +16,10 @@ final class HorseDao extends BaseDao
                 VALUES (:horse_id, :speed, :strength, :endurance)';
 
         $data = [
-            'horse_id'  => $horse()->id()->value(),
-            'speed'     => $horse()->stats()->speed()->distance()->value(),
-            'strength'  => $horse()->stats()->strength()->value(),
-            'endurance' => $horse()->stats()->endurance()->value()
+            'horse_id'  => $horse->id()->value(),
+            'speed'     => $horse->stats()->speed()->distance()->value(),
+            'strength'  => $horse->stats()->strength()->value(),
+            'endurance' => $horse->stats()->endurance()->value()
         ];
 
         $this->db->prepare($sql)->execute($data);
