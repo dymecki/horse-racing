@@ -4,34 +4,46 @@
         <meta charset="utf-8">
         <title>@yield('title', 'Horse Racing Simulator')</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha256-YLGeXaapI0/5IgZopewRJcFXomhRMlYYjugPLSyNjTY=" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css"/>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+        <script>
+            $('#current-races').collapse('show');
+
+            $(function() {
+                $('[data-toggle="tooltip"]').tooltip();
+            });
+        </script>
 
         <style>
-            h1, h2,h3,h4,h5,h6 {
-                color: #909090;
-            }
-            body {
-                /*background-color: #454d55;*/
-            }
-
             .container nav.navbar {
                 margin-bottom: 20px;
             }
 
-            .row.bottom {
+            .bottom {
                 border-top: 1px solid #efefef;
                 color: #909090;
+                font-size: 0.8em;
                 padding: 30px;
                 text-align: center;
             }
 
             .progress {
-                /*background-color: #606060;*/
-                background-color: transparent;
+                background-color: rgba(0, 0, 0, 0.05);
+                height: auto;
                 -webkit-box-shadow: none;
                 box-shadow: none;
+                text-shadow: #303030 1px 1px 3px;
             }
 
+            .table-hover> tbody> tr:hover{
+                background-color: lightyellow;
+            }
+
+            .accordion .card-header:hover {
+                background: rgba(0, 0, 0, 0.06);
+            }
         </style>
     </head>
     <body class="_bg-dark">
@@ -55,21 +67,25 @@
                     <!--<button type="button" class="btn btn-secondary">create race</button>-->
                     <!--<button type="button" class="btn btn-warning">progress</button>-->
 
-                    
-                    <a href="{{ route('create') }}" class="btn btn-secondary @if (!$canAddNewRace) disabled @endif">create race</a>
-                    <a href="{{ route('progress') }}" class="btn btn-warning" title="Move all horses by 10 seconds">progress</a>
+                    <a href="{{ route('create') }}" class="btn btn-info @if (!$canAddNewRace) disabled @endif">create race</a>
+                    <a href="{{ route('progress') }}" 
+                       class="btn btn-info"
+                       title="Advance all horses by 10 seconds"
+                       data-toggle="tooltip"
+                       data-placement="bottom"
+                       >progress</a>
                 </div>
             </nav>
 
             <div class="row">
-                <div class="col-md-12 content">
+                <div class="col-md-12 content" style="padding-bottom: 20px;">
                     @yield('content')
                 </div>
             </div>
 
-            <div class="row bottom">
+            <div class="navbar bottom">
                 <div class="col-md-12">
-                    <p>Copyright {{ date('Y') }} Michael Dymecki. Made on ThinkPad X230 :)</p>
+                    <p sty>Copyright {{ date('Y') }} by Michael Dymecki. Made on ThinkPad X230 :)</p>
                 </div>
             </div>
         </div>
