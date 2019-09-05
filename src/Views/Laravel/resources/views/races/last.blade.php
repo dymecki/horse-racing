@@ -6,42 +6,57 @@
 
 <h1>Last 5 races</h1>
 
-<p>See three best horses in every of last races.</p>
+<p>Best three horses in every of last five races.</p>
 
-@foreach ($races as $race)
-<h6>Race {{ $race->name }}</h6>
+<div class="accordion" id="last-races">
 
-<table class="table table-striped table-sm">
-    <thead>
-        <tr>
-            <th scope="col">Horse id</th>
-            <th scope="col">Distance covered</th>
-            <th scope="col">Time</th>
-        </tr>
-    </thead>
-    <tbody>
+    @foreach ($races as $race)
+    <div class="card">
+        <div
+            class="card-header"
+            id="heading-{{ $race->name }}"
+            data-toggle="collapse"
+            data-target="#collapse-{{ $race->name }}"
+            aria-expanded="true"
+            aria-controls="collapse-{{ $race->name }}"
+            style="cursor: pointer;"
+            >
+            <h2 class="mb-0 align-baseline">
+                <span class="h6">Race {{ $race->name }} - {{ $race->distance }}m</span>
+            </h2>
+        </div>
 
-        @foreach ($race->horseRuns as $horse)
-        <tr>
-            <td>{{ $horse->name }}</td>
-            <td>
-                <div class="progress">
-                    <div
-                        class="progress-bar progress-bar-striped bg-success"
-                        role="progressbar"
-                        style="width: {{ $horse->distanceCovered }}%"
-                        aria-valuenow="{{ $horse->distanceCovered }}"
-                        aria-valuemin="0"
-                        aria-valuemax="100">{{ $horse->distanceCovered }}
-                    </div>
-                </div>
-            </td>
-            <td>{{ $horse->time }} s</td>
-        </tr>
-        @endforeach
+        <div
+            id="collapse-{{ $race->name }}"
+            class="collapse @if ($loop->first) show @endif"
+            aria-labelledby="heading-{{ $race->name }}"
+            data-parent="#last-races"
+            >
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Position</th>
+                            <th scope="col">Horse id</th>
+                            <th scope="col">Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-    </tbody>
-</table>
+                        @foreach ($race->horseRuns as $horse)
+                        <tr>
+                            <td>{{ $horse->position }}</td>
+                            <td>{{ $horse->name }}</td>
+                            <td>{{ $horse->time }}</td>
+                        </tr>
+                        @endforeach
 
-@endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    @endforeach
+
+</div>
 @endsection
