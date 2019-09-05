@@ -8,5 +8,5 @@ use App\Application\Services\RaceService;
 
 (new RaceService())->updateRaces();
 
-header('Location: /');
+header('Location: index.php');
 exit;
