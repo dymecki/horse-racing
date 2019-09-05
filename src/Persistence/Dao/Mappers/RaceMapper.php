@@ -24,6 +24,7 @@ final class RaceMapper
             $distance = isset($items[0]) ? $items[0]->distance : 0;
             $race     = Race::create($raceId, $distance, []);
 
+            /* @var $items \stdClass[] */
             foreach ($items as $item) {
                 $race->addHorseRun(HorseRun::create($item));
             }
