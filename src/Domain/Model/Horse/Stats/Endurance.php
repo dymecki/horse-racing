@@ -4,8 +4,12 @@ declare(strict_types = 1);
 
 namespace App\Domain\Model\Horse\Stats;
 
+use App\Domain\Model\Horse\Stats\Distance;
+
 final class Endurance
 {
+    const ENDURANCE_METERS = 100;
+
     private $endurance;
 
     public function __construct(float $endurance)
@@ -15,6 +19,11 @@ final class Endurance
         }
 
         $this->endurance = $endurance;
+    }
+
+    public function distance(): Distance
+    {
+        return new Distance($this->endurance * self::ENDURANCE_METERS);
     }
 
     public function value(): float
