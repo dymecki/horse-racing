@@ -7,18 +7,17 @@ namespace App\Domain\Model\Race;
 use App\Domain\Model\Horse\Stats\Distance;
 use App\Domain\Model\Race\RaceId;
 use App\Domain\Model\Horse\Stats\Time;
+use App\Domain\Model\Horse\HorseRunCollection;
 
 final class Race
 {
     const ADVANCE_SECONDS = 10;
 
     private $id;
-
-    /** @var HorseRun[] */
     private $horseRuns;
     private $distance;
 
-    private function __construct(RaceId $id, Distance $distance, array $horseRuns)
+    private function __construct(RaceId $id, Distance $distance, HorseRunCollection $horseRuns)
     {
         $this->id        = $id;
         $this->distance  = $distance;
@@ -27,21 +26,25 @@ final class Race
 
     public static function init(int $distance = 1500): self
     {
-        return new self(RaceId::init(), new Distance($distance), []);
+        return new self(
+            RaceId::init(),
+            new Distance($distance),
+            new HorseRunCollection()
+        );
     }
 
-    public static function create(string $id, int $distance, $horseRuns): self
+    public static function create(string $id, int $distance, array $horseRuns = []): self
     {
         return new self(
             new RaceId($id),
             new Distance($distance),
-            $horseRuns
+            new HorseRunCollection($horseRuns)
         );
     }
 
     public function addHorseRun(HorseRun $horseRun): void
     {
-        $this->horseRuns[] = $horseRun;
+        $this->horseRuns->addHorseRun($horseRun);
     }
 
     public function runForSeconds(int $seconds): void
@@ -55,25 +58,9 @@ final class Race
         }
     }
 
-    public function isOver(): bool
-    {
-        foreach ($this->horseRuns as $horseRun) {
-            if ($this->isStillGoing($horseRun)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public function isStillGoing(HorseRun $horseRun): bool
-    {
-        return $horseRun->stats()->distanceCovered() < $this->distance;
-    }
-
     public function time(): Time
     {
-        return isset($this->horseRuns[0]) ? $this->horseRuns[0]->stats()->time() : new Time(0);
+        return $this->horseRuns->isEmpty() ? new Time() : $this->horseRuns->first()->stats()->time();
     }
 
     public function id(): RaceId
@@ -81,7 +68,7 @@ final class Race
         return $this->id;
     }
 
-    public function horseRuns(): array
+    public function horseRuns(): HorseRunCollection
     {
         return $this->horseRuns;
     }
