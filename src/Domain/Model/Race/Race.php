@@ -60,7 +60,7 @@ final class Race
 
     public function time(): Time
     {
-        return $this->horseRuns->isEmpty() ? new Time() : $this->horseRuns->first()->stats()->time();
+        return $this->horseRuns->isEmpty() ? new Time() : $this->horseRuns->last()->stats()->time();
     }
 
     public function id(): RaceId

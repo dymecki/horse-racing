@@ -31,9 +31,9 @@ final class HorseRunCollection implements \IteratorAggregate, \Countable
         $this->items[] = $horseRun;
     }
 
-    public function first(): HorseRun
+    public function last(): HorseRun
     {
-        return $this->items[0];
+        return end($this->items);
     }
 
     public function isEmpty(): bool
