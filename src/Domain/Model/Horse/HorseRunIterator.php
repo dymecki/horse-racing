@@ -38,6 +38,6 @@ final class HorseRunIterator implements \Iterator
 
     public function valid(): bool
     {
-        return isset($this->collection[$this->key]);
+        return $this->collection->isset($this->key);
     }
 }
