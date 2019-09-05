@@ -25,7 +25,7 @@ final class HorseDao extends BaseDao
         $this->db->prepare($sql)->execute($data);
     }
 
-    public function getBestHorseRunEver(): \stdClass
+    public function getBestHorseRunEver()
     {
         $sql = 'SELECT h.horse_id,
                        r.distance "Race distance",
