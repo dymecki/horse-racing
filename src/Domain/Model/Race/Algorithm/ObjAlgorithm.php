@@ -2,12 +2,13 @@
 
 declare(strict_types = 1);
 
-namespace App\Domain\Model\Race\Stats;
+namespace App\Domain\Model\Race\Algorithm;
 
 use App\Domain\Model\Race\HorseRun;
 use App\Domain\Model\Horse\Stats\Time;
 use App\Domain\Model\Horse\Stats\Speed;
 use App\Domain\Model\Horse\Stats\Distance;
+use App\Domain\Model\Race\Algorithm\DistanceAlgorithm;
 
 final class ObjAlgorithm implements DistanceAlgorithm
 {
@@ -15,21 +16,21 @@ final class ObjAlgorithm implements DistanceAlgorithm
     private $seconds;
     private $raceDistance;
 
-    public function __construct(HorseRun $run, int $seconds, Distance $raceDistance)
+    public function __construct(HorseRun $run, Time $seconds, Distance $raceDistance)
     {
         $this->run          = $run;
-        $this->seconds      = new Time($seconds);
+        $this->seconds      = $seconds;
         $this->raceDistance = $raceDistance;
     }
 
-    public function compute()
+    public function compute(): Speed
     {
         $raceDistance  = $this->raceDistance;
         $coveredTime   = $this->run->stats()->time();
         $fastTime      = $this->fastDistance()->timeTaken($this->fastSpeed());
         $forwardedTime = $coveredTime->forwardedBy($this->seconds);
 
-        if ($forwardedTime->greater($fastTime)) {
+        if ($forwardedTime->isGreater($fastTime)) {
             $slowTime        = $forwardedTime->cut($fastTime);
             $slowDistance    = $this->run->slowSpeed()->distanceAfter($slowTime);
             $coveredDistance = $this->fastDistance()->extendedBy($slowDistance);
@@ -43,21 +44,7 @@ final class ObjAlgorithm implements DistanceAlgorithm
             $coveredDistance = $raceDistance;
         }
 
-        return [$coveredDistance->value(), $forwardedTime->value()];
-
-//        $coveredTime = $forwardedTime;
-//
-//        if ($coveredDistance->isGreater($raceDistance)) {
-//            $coveredTime     = $coveredTime->cut(new Time($coveredTime->value() * $coveredDistance->cut($raceDistance)->ratio($coveredDistance)->value()));
-//            $coveredDistance = $raceDistance;
-//        }
-//
-//        return [$coveredDistance->value(), $coveredTime->value()];
-    }
-
-    public function slowSpeed(): Speed
-    {
-        return $this->run->slowSpeed();
+        return new Speed($coveredDistance, $forwardedTime);
     }
 
     public function fastSpeed(): Speed
@@ -65,14 +52,8 @@ final class ObjAlgorithm implements DistanceAlgorithm
         return $this->run->horse()->stats()->speed();
     }
 
-    public function slowDistance(): Distance
-    {
-        return $this->slowSpeed()->distance();
-    }
-
     public function fastDistance(): Distance
     {
-//        return $this->fastSpeed()->distance();
         return $this->run->fastDistance();
     }
 }
