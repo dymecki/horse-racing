@@ -8,7 +8,7 @@ use App\Domain\Model\Horse\Stats\Distance;
 
 final class Endurance
 {
-    const ENDURANCE_METERS = 100;
+    const FULL_SPEED_METERS = 100;
 
     private $endurance;
 
@@ -23,7 +23,7 @@ final class Endurance
 
     public function distance(): Distance
     {
-        return new Distance($this->endurance * self::ENDURANCE_METERS);
+        return new Distance($this->endurance * self::FULL_SPEED_METERS);
     }
 
     public function value(): float
