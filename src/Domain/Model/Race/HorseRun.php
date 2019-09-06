@@ -8,8 +8,8 @@ use App\Domain\Model\Horse\Horse;
 use App\Domain\Model\Horse\Stats\Distance;
 use App\Domain\Model\Horse\Stats\Speed;
 use App\Domain\Model\Race\Stats\HorseRunStats;
-use App\Domain\Model\Race\Stats\ObjAlgorithm;
-use App\Domain\Model\Race\Stats\ScalarAlgorithm;
+use App\Domain\Model\Race\Algorithm\AlgorithmFactory;
+use App\Domain\Model\Horse\Stats\Time;
 
 final class HorseRun
 {
@@ -34,16 +34,16 @@ final class HorseRun
         );
     }
 
-    public function runForSeconds(int $seconds, Distance $raceDistance): void
+    public function run(int $seconds, Distance $raceDistance): void
     {
         if (!$this->isStillGoing($raceDistance)) {
             return;
         }
 
-//        $result = (new ScalarAlgorithm($this, $seconds, $raceDistance))->compute();
-        $result = (new ObjAlgorithm($this, $seconds, $raceDistance))->compute();
+        $algorithm = AlgorithmFactory::obj($this, new Time($seconds), $raceDistance);
+        $stats     = $algorithm->compute();
 
-        $this->stats->update(new Distance($result[0]), $result[1]);
+        $this->stats->update($stats);
     }
 
     public function isStillGoing(Distance $raceDistance): bool

@@ -47,10 +47,10 @@ final class Race
         $this->horseRuns->addHorseRun($horseRun);
     }
 
-    public function runForSeconds(int $seconds): void
+    public function run(int $seconds): void
     {
         foreach ($this->horseRuns as $horseRun) {
-            $horseRun->runForSeconds($seconds, $this->distance);
+            $horseRun->run($seconds, $this->distance);
         }
     }
 

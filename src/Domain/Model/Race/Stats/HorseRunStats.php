@@ -6,6 +6,7 @@ namespace App\Domain\Model\Race\Stats;
 
 use App\Domain\Model\Horse\Stats\Distance;
 use App\Domain\Model\Horse\Stats\Time;
+use App\Domain\Model\Horse\Stats\Speed;
 
 final class HorseRunStats
 {
@@ -29,10 +30,10 @@ final class HorseRunStats
         );
     }
 
-    public function update(Distance $distance, float $seconds): void
+    public function update(Speed $stats): void
     {
-        $this->distanceCovered = $distance;
-        $this->time            = new Time($seconds);
+        $this->distanceCovered = $stats->distance();
+        $this->time            = $stats->time();
     }
 
     public function distanceCovered(): Distance

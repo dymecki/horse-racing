@@ -50,7 +50,7 @@ final class RaceService
         $races       = (new RaceMapper($activeRaces))->get();
 
         foreach ($races as $race) {
-            $race->runForSeconds(10);
+            $race->run(10);
         }
 
         foreach ($races as $race) {

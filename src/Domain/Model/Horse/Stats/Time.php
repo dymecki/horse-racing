@@ -37,7 +37,7 @@ final class Time
         return new self($this->seconds - $time->value());
     }
 
-    public function greater(self $time): bool
+    public function isGreater(self $time): bool
     {
         return $this->seconds > $time->value();
     }
