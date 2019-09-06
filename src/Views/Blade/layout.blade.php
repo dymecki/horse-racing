@@ -66,9 +66,9 @@
                     <!--<button type="button" class="btn btn-secondary">create race</button>-->
                     <!--<button type="button" class="btn btn-warning">progress</button>-->
 
-                    <a href="create-race" class="btn btn-info @if (!$canAddNewRace) disabled @endif">create race</a>
-                    <a href="progress"
-                       class="btn btn-info"
+                    <a href="create-race.php" class="btn btn-info @if (!$canAddNewRace) disabled @endif">create race</a>
+                    <a href="progress.php"
+                       class="btn btn-info @if (!$canProgress) disabled @endif"
                        title="Advance all horses by 10 seconds"
                        data-toggle="tooltip"
                        data-placement="bottom"

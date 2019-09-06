@@ -25,6 +25,11 @@ final class RaceService
         return $this->race->countActiveRaces() < self::MAX_RACES_AMOUNT;
     }
 
+    public function canProgress(): bool
+    {
+        return $this->race->countActiveRaces() > 0;
+    }
+
     public function startNewRace(): void
     {
         if (!$this->canAddNewRace()) {
