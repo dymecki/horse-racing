@@ -89,21 +89,11 @@ final class RaceDao extends BaseDao
      */
     public function getLastRacesBestPositions(): array
     {
-        $sql = 'SELECT tmp.*,
-                       speed,
-                       strength,
-                       endurance
-                  FROM (SELECT race_id,
-                               horse_id,
-                               distance,
-                               distance_covered,
-                               "time",
-                               DENSE_RANK() OVER (ORDER BY r.created_at DESC) partition_number,
+        $sql = 'SELECT *
+                  FROM (SELECT *,
+                               DENSE_RANK() OVER (ORDER BY created_at DESC) partition_number,
                                ROW_NUMBER() OVER (PARTITION BY race_id ORDER BY "time" ASC) horse_position
-                          FROM races_horses rh
-                          JOIN races r USING(race_id)
-                         WHERE rh.distance_covered >= r.distance) tmp
-                  JOIN horses h USING(horse_id)
+                          FROM finished_races_view) tmp
                  WHERE horse_position <= 3 AND partition_number <= 5
                  ORDER BY partition_number ASC, horse_position ASC';
 

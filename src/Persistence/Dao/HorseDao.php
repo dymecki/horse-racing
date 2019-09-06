@@ -27,20 +27,7 @@ final class HorseDao extends BaseDao
 
     public function getBestHorseRunEver()
     {
-        $sql = 'SELECT h.horse_id,
-                       r.distance "Race distance",
-                       h.speed,
-                       h.strength,
-                       h.endurance,
-                       rh.distance_covered,
-                       rh."time"
-                  FROM horses h
-                  JOIN races_horses rh USING(horse_id)
-                  JOIN races r         USING(race_id)
-                 WHERE rh.distance_covered = r.distance
-                 ORDER BY rh."time" ASC
-                 LIMIT 1';
-
+        $sql  = 'SELECT * FROM finished_races_view ORDER BY "time" ASC LIMIT 1';
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
 
