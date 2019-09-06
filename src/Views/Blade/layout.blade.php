@@ -84,7 +84,7 @@
 
             <div class="navbar bottom">
                 <div class="col-md-12">
-                    <p sty>Copyright {{ date('Y') }} by Michael Dymecki. Made on ThinkPad X230 :)</p>
+                    <p sty>Copyright {{ date('Y') }} by Michael Dymecki. Made on ThinkPad X230</p>
                 </div>
             </div>
         </div>
