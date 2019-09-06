@@ -11,7 +11,7 @@ final class Speed
     private $distance;
     private $time;
 
-    private function __construct(Distance $distance, Time $time)
+    public function __construct(Distance $distance, Time $time)
     {
         $this->distance = $distance;
         $this->time     = $time;
