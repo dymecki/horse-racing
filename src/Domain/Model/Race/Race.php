@@ -11,8 +11,6 @@ use App\Domain\Model\Horse\HorseRunCollection;
 
 final class Race
 {
-    const ADVANCE_SECONDS = 10;
-
     private $id;
     private $horseRuns;
     private $distance;
