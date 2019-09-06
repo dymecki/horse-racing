@@ -17,14 +17,29 @@ final class Time
         $this->seconds = $seconds;
     }
 
+    public static function obj(float $seconds = 0.0): self
+    {
+        return new self($seconds);
+    }
+
     public function value(): float
     {
         return $this->seconds;
     }
 
-    public function withAdd(float $seconds): self
+    public function forwardedBy(self $seconds): self
     {
-        return new self($this->seconds + $seconds);
+        return new self($this->seconds + $seconds->value());
+    }
+
+    public function cut(self $time): self
+    {
+        return new self($this->seconds - $time->value());
+    }
+
+    public function greater(self $time): bool
+    {
+        return $this->seconds > $time->value();
     }
 
     public function formatted(): string

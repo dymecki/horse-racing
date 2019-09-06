@@ -13,14 +13,14 @@ final class HorseFactory
     public static function make(): HorseRun
     {
         $horse = new Horse(
-            HorseId::init(),
-            HorseStats::create(
+            HorseId::obj(),
+            HorseStats::obj(
                 rand(0, 10) / 10,
                 rand(0, 10) / 10,
                 rand(0, 10) / 10
             )
         );
 
-        return new HorseRun($horse, HorseRunStats::create());
+        return new HorseRun($horse, HorseRunStats::obj());
     }
 }

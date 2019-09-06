@@ -10,7 +10,7 @@ final class RaceFactory
 {
     public static function make(): Race
     {
-        $race = Race::init(1500);
+        $race = Race::obj(1500);
 
         for ($i = 0; $i < 8; $i++) {
             $race->addHorseRun(HorseFactory::make());

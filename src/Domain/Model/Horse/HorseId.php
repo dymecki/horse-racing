@@ -19,12 +19,12 @@ final class HorseId
         $this->id = $id;
     }
 
-    public static function init(): self
+    public static function obj(): self
     {
         return new self(Uuid::uuid4()->toString());
     }
 
-    public static function create(string $id): self
+    public static function fromString(string $id): self
     {
         return new self($id);
     }

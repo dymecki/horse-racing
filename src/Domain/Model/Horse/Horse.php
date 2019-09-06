@@ -17,11 +17,11 @@ final class Horse
         $this->stats = $stats;
     }
 
-    public static function create(\stdClass $data): self
+    public static function obj(\stdClass $data): self
     {
         return new self(
-            HorseId::create($data->horse_id),
-            HorseStats::create(
+            HorseId::fromString($data->horse_id),
+            HorseStats::obj(
                 (float) $data->speed,
                 (float) $data->strength,
                 (float) $data->endurance
