@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace App\Domain\Model\Horse\Stats;
 
+use App\Domain\Model\Horse\Stats\Speed;
+
 final class Distance
 {
     private $distance;
@@ -17,12 +19,32 @@ final class Distance
         $this->distance = $distance;
     }
 
+    public function cut(self $distance): self
+    {
+        return new self($this->distance - $distance->value());
+    }
+
+    public function ratio(self $distance): self
+    {
+        return new self($this->distance / $distance->value());
+    }
+
+    public function timeTaken(Speed $speed): Time
+    {
+        return new Time($this->distance / $speed->distance()->value());
+    }
+
+    public function isGreater(self $distance): bool
+    {
+        return $this->distance > $distance->value();
+    }
+
     public function value(): float
     {
         return $this->distance;
     }
 
-    public function withAdd(Distance $distance): self
+    public function extendedBy(Distance $distance): self
     {
         return new self($this->distance + $distance->value());
     }
