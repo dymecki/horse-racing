@@ -17,6 +17,6 @@ final class HorseMapper
 
     public function get(): HorseRun
     {
-        return HorseRun::create($this->data);
+        return HorseRun::obj($this->data);
     }
 }

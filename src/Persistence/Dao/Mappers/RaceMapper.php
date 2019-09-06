@@ -22,11 +22,11 @@ final class RaceMapper
 
         foreach ($this->data as $raceId => $items) {
             $distance = isset($items[0]) ? $items[0]->distance : 0;
-            $race     = Race::create($raceId, $distance, []);
+            $race     = Race::fromData($raceId, $distance, []);
 
             /* @var $items \stdClass[] */
             foreach ($items as $item) {
-                $race->addHorseRun(HorseRun::create($item));
+                $race->addHorseRun(HorseRun::obj($item));
             }
 
             $races[] = $race;

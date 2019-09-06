@@ -8,11 +8,11 @@ use App\Domain\Model\Horse\Horse;
 use App\Domain\Model\Horse\Stats\Distance;
 use App\Domain\Model\Horse\Stats\Speed;
 use App\Domain\Model\Race\Stats\HorseRunStats;
+use App\Domain\Model\Race\Stats\ObjAlgorithm;
+use App\Domain\Model\Race\Stats\ScalarAlgorithm;
 
 final class HorseRun
 {
-    const ENDURANCE_METERS = 100;
-
     private $horse;
     private $stats;
 
@@ -22,11 +22,11 @@ final class HorseRun
         $this->stats = $stats;
     }
 
-    public static function create($data): self
+    public static function obj($data): self
     {
         return new self(
-            Horse::create($data),
-            HorseRunStats::create(
+            Horse::obj($data),
+            HorseRunStats::obj(
                 (float) $data->distance_covered,
                 (float) $data->time,
                 $data->horse_position ?? 0
@@ -34,27 +34,16 @@ final class HorseRun
         );
     }
 
-    public function runForSeconds(int $seconds, int $raceDistance = 1500): void
+    public function runForSeconds(int $seconds, Distance $raceDistance): void
     {
-        $time              = $this->stats->time()->value();
-        $fullSpeedDistance = $this->fullSpeedDistance()->value();
-        $slowSpeedDistance = $this->slowSpeed()->distance()->value();
-        $fullSpeed         = $this->horse->stats()->speed()->time()->value();
-        $fullSpeedSeconds  = $fullSpeedDistance / $fullSpeed;
-        $forwardTime       = $time + $seconds;
-
-        $coveredDistance = $forwardTime > $fullSpeedSeconds 
-            ? $fullSpeedDistance + ($forwardTime - $fullSpeedSeconds) * $slowSpeedDistance
-            : $forwardTime * $fullSpeed;
-
-        $time = $forwardTime;
-
-        if ($coveredDistance > $raceDistance) {
-            $time            -= $time * ($coveredDistance - $raceDistance) / $coveredDistance;
-            $coveredDistance = $raceDistance;
+        if (!$this->isStillGoing($raceDistance)) {
+            return;
         }
 
-        $this->stats->update(new Distance($coveredDistance), $time);
+//        $result = (new ScalarAlgorithm($this, $seconds, $raceDistance))->compute();
+        $result = (new ObjAlgorithm($this, $seconds, $raceDistance))->compute();
+
+        $this->stats->update(new Distance($result[0]), $result[1]);
     }
 
     public function isStillGoing(Distance $raceDistance): bool
@@ -72,14 +61,14 @@ final class HorseRun
         return $this->stats;
     }
 
-    private function fullSpeedDistance(): Distance
+    public function fastDistance(): Distance
     {
-        return new Distance($this->horse->stats()->endurance()->value() * self::ENDURANCE_METERS);
+        return $this->horse->stats()->endurance()->distance();
     }
 
-    private function slowSpeed(): Speed
+    public function slowSpeed(): Speed
     {
-        return $this->horse->stats()->speed()->subtract($this->slownessFactor());
+        return $this->horse->stats()->speed()->slowedBy($this->slownessFactor());
     }
 
     private function slownessFactor(): float

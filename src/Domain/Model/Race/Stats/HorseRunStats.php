@@ -20,7 +20,7 @@ final class HorseRunStats
         $this->position        = $position;
     }
 
-    public static function create(float $distance = 0.0, float $time = 0.0, int $position = 0): self
+    public static function obj(float $distance = 0.0, float $time = 0.0, int $position = 0): self
     {
         return new self(
             new Distance($distance),
