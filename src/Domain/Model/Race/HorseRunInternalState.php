@@ -26,7 +26,7 @@ final class HorseRunInternalState
             'strength'          => $run->horse()->stats()->strength()->value(),
             'endurance'         => $run->horse()->stats()->endurance()->value(),
             'distance_covered'  => $run->stats()->distanceCovered()->value(),
-            'fullSpeedDistance' => $run->fullSpeedDistance()->value() . ' m',
+            'fullSpeedDistance' => $run->fastDistance()->value() . ' m',
             'time'              => $run->stats()->time()->value(),
             'secondsPerMeter'   => number_format($secondsPerMeter, 2),
             'metersPerSecond'   => $metersPerSecond,

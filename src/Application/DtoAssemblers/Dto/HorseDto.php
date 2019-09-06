@@ -14,4 +14,5 @@ final class HorseDto
     public $distanceCovered;
     public $time;
     public $position;
+    public $fullSpeedDistance;
 }
