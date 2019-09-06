@@ -17,10 +17,10 @@ final class HorseStats
         $this->endurance = $endurance;
     }
 
-    public static function create(float $speed, float $strength, float $endurance): self
+    public static function obj(float $speed, float $strength, float $endurance): self
     {
         return new self(
-            Speed::init($speed),
+            Speed::obj($speed),
             new Strength($strength),
             new Endurance($endurance)
         );

@@ -24,16 +24,16 @@ final class Race
         $this->horseRuns = $horseRuns;
     }
 
-    public static function init(int $distance = 1500): self
+    public static function obj(int $distance = 1500): self
     {
         return new self(
-            RaceId::init(),
+            RaceId::obj(),
             new Distance($distance),
             new HorseRunCollection()
         );
     }
 
-    public static function create(string $id, int $distance, array $horseRuns = []): self
+    public static function fromData(string $id, int $distance, array $horseRuns = []): self
     {
         return new self(
             new RaceId($id),
@@ -50,11 +50,7 @@ final class Race
     public function runForSeconds(int $seconds): void
     {
         foreach ($this->horseRuns as $horseRun) {
-            if (!$horseRun->isStillGoing($this->distance)) {
-                continue;
-            }
-
-            $horseRun->runForSeconds($seconds);
+            $horseRun->runForSeconds($seconds, $this->distance);
         }
     }
 

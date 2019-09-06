@@ -17,7 +17,7 @@ final class Speed
         $this->time     = $time;
     }
 
-    public static function init(float $distance): self
+    public static function obj(float $distance): self
     {
         if ($distance < 0 || $distance > 10) {
             throw new \InvalidArgumentException('Speed value must be in range of 0.0 - 10.0');
@@ -29,12 +29,17 @@ final class Speed
         );
     }
 
-    public function subtract(float $delta): self
+    public function slowedBy(float $delta): self
     {
         return new self(
             new Distance($this->distance->value() - $delta),
             $this->time
         );
+    }
+
+    public function distanceAfter(Time $time): Distance
+    {
+        return new Distance($this->distance->value() * $time->value());
     }
 
     public function distance(): Distance

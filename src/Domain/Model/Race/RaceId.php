@@ -19,7 +19,7 @@ final class RaceId
         $this->id = $id;
     }
 
-    public static function init(): self
+    public static function obj(): self
     {
         return new self(Uuid::uuid4()->toString());
     }
