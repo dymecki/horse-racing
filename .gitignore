@@ -4,3 +4,4 @@ todo
 /reports
 .env
 src/Views/Blade/cache
+.idea
