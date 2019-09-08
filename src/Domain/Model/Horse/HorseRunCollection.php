@@ -8,12 +8,17 @@ use App\Domain\Model\Race\HorseRun;
 
 final class HorseRunCollection implements \IteratorAggregate, \Countable
 {
-    /** @var HorseRun */
+    /** @var HorseRun[] */
     private $items;
 
-    public function make(HorseRun ...$items)
+    private function __construct(HorseRun ...$items)
     {
         $this->items = $items;
+    }
+
+    public static function obj(array $items = []): self
+    {
+        return new self(...$items);
     }
 
     public function getIterator(): HorseRunIterator
@@ -21,17 +26,17 @@ final class HorseRunCollection implements \IteratorAggregate, \Countable
         return new HorseRunIterator($this);
     }
 
-    public function getHorseRun(int $key): HorseRun
+    public function get(int $key): ?HorseRun
     {
         return $this->items[$key] ?? null;
     }
 
-    public function addHorseRun(HorseRun $horseRun): void
+    public function add(HorseRun $horseRun): void
     {
         $this->items[] = $horseRun;
     }
 
-    public function last(): HorseRun
+    public function last(): ?HorseRun
     {
         return end($this->items);
     }

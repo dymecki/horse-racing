@@ -4,8 +4,6 @@ declare(strict_types = 1);
 
 namespace App\Domain\Model\Horse;
 
-use App\Domain\Model\Horse\HorseRunCollection;
-
 final class HorseRunIterator implements \Iterator
 {
     private $collection;
@@ -18,7 +16,7 @@ final class HorseRunIterator implements \Iterator
 
     public function current()
     {
-        return $this->collection->getHorseRun($this->key);
+        return $this->collection->get($this->key);
     }
 
     public function key(): int
