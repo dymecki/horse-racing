@@ -3,7 +3,6 @@
 declare(strict_types = 1);
 
 use Phinx\Migration\AbstractMigration;
-//use Phinx\Util\Literal;
 
 class CreateFinishedRacesView extends AbstractMigration
 {

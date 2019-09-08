@@ -8,6 +8,6 @@ class AddRacesCheckDistanceConstraint extends AbstractMigration
 {
     public function change()
     {
-        $this->execute('ALTER TABLE races ADD CONSTRAINT check_distance CHECK(distance > 0)');
+        $this->execute('ALTER TABLE races ADD CONSTRAINT check_distance CHECK (distance > 0)');
     }
 }

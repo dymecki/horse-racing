@@ -8,16 +8,21 @@ class CreateRacesHorsesTable extends AbstractMigration
 {
     public function change()
     {
-        $this->table('races_horses', ['id' => false, 'primary_key' => ['race_id', 'horse_id']])
-            ->addColumn('race_id', 'uuid')
-            ->addColumn('horse_id', 'uuid')
-            ->addColumn('distance_covered', 'decimal', ['default' => 0, 'precision' => 6, 'scale' => 2])
-            ->addColumn('time', 'decimal', ['default' => 0, 'precision' => 6, 'scale' => 2])
-            ->addColumn('created_at', 'timestamp', ['timezone' => true, 'default' => 'CURRENT_TIMESTAMP'])
-            ->addColumn('updated_at', 'timestamp', ['timezone' => true, 'null' => true])
-            ->addIndex(['race_id', 'horse_id'], ['unique' => true])
-            ->addForeignKey('race_id', 'races', 'race_id')
-            ->addForeignKey('horse_id', 'horses', 'horse_id')
-            ->save();
+        $ddl = 'CREATE TABLE races_horses (
+                    race_id             uuid            not null,
+                    horse_id            uuid            not null,
+                    distance_covered    numeric(6,2)    not null default 0,
+                    time                numeric(6,2)    not null default 0,
+                    created_at          timestamptz     default CURRENT_TIMESTAMP,
+                    updated_at          timestamptz,
+
+                    FOREIGN KEY (race_id) REFERENCES races (race_id),
+                    FOREIGN KEY (horse_id) REFERENCES horses (horse_id)
+            );';
+
+        $ddl .= 'CREATE UNIQUE INDEX ON races_horses (race_id, horse_id);';
+        $ddl .= 'CREATE INDEX ON races_horses (distance_covered);';
+
+        $this->execute($ddl);
     }
 }

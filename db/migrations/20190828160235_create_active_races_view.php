@@ -3,7 +3,6 @@
 declare(strict_types = 1);
 
 use Phinx\Migration\AbstractMigration;
-//use Phinx\Util\Literal;
 
 class CreateActiveRacesView extends AbstractMigration
 {
@@ -14,7 +13,8 @@ class CreateActiveRacesView extends AbstractMigration
                   FROM races r
                   JOIN races_horses rh USING(race_id)
                  WHERE rh.distance_covered < r.distance
-                 GROUP BY r.race_id';
+                 GROUP BY r.race_id
+                 ORDER BY r.created_at DESC';
 
         $this->execute($sql);
     }
