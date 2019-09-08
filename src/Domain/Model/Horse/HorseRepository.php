@@ -11,7 +11,7 @@ interface HorseRepository
 {
     public function add(Horse $horse): void;
 
-    public function bestHorseRunEver(): HorseRun;
+    public function bestHorseRunEver(): ?HorseRun;
 
     public function updateHorseProgress(Race $race, HorseRun $horse): void;
 }

@@ -27,10 +27,14 @@ final class DbHorseRepository extends DbRepository implements HorseRepository
         $this->db->prepare($sql)->execute($data);
     }
 
-    public function bestHorseRunEver(): HorseRun
+    public function bestHorseRunEver(): ?HorseRun
     {
         $sql  = 'SELECT * FROM finished_races_view ORDER BY "time" LIMIT 1';
         $data = $this->db->query($sql)->fetchObject();
+
+        if (!$data) {
+            return null;
+        }
 
         $horse = Horse::obj(
             $data->horse_id,
