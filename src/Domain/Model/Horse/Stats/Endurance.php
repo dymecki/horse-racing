@@ -4,8 +4,6 @@ declare(strict_types = 1);
 
 namespace App\Domain\Model\Horse\Stats;
 
-use App\Domain\Model\Horse\Stats\Distance;
-
 final class Endurance
 {
     const FULL_SPEED_METERS = 100;
