@@ -16,7 +16,7 @@ final class HorseDtoAssembler
         $this->horseRun = $horseRun;
     }
 
-    public function writeDto(): HorseDto
+    public function dto(): HorseDto
     {
         $hr = $this->horseRun;
 
