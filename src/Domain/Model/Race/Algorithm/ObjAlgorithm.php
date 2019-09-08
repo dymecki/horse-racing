@@ -8,7 +8,6 @@ use App\Domain\Model\Race\HorseRun;
 use App\Domain\Model\Horse\Stats\Time;
 use App\Domain\Model\Horse\Stats\Speed;
 use App\Domain\Model\Horse\Stats\Distance;
-use App\Domain\Model\Race\Algorithm\DistanceAlgorithm;
 
 final class ObjAlgorithm implements DistanceAlgorithm
 {

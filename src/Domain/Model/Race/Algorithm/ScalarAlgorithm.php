@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace App\Domain\Model\Race\Algorithm;
 
-use App\Domain\Model\Race\HorseRun;
 use App\Domain\Model\Horse\Stats\Time;
+use App\Domain\Model\Race\HorseRun;
 use App\Domain\Model\Horse\Stats\Speed;
 use App\Domain\Model\Horse\Stats\Distance;
 
@@ -46,7 +46,7 @@ final class ScalarAlgorithm implements DistanceAlgorithm
             $coveredDistance = $raceDistance;
         }
 
-        return new Speed($coveredDistance, $time);
+        return new Speed($coveredDistance, new Time($time));
     }
 
     public function slowSpeed(): Speed
