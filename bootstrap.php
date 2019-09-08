@@ -2,10 +2,10 @@
 
 declare(strict_types = 1);
 
-require_once '../vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 use Jenssegers\Blade\Blade;
-use App\Application\Services\RaceService;
+use App\Application\RaceService;
 
 Dotenv\Dotenv::create(__DIR__)->load();
 
