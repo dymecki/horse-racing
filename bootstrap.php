@@ -7,6 +7,15 @@ require_once __DIR__ . '/vendor/autoload.php';
 use Jenssegers\Blade\Blade;
 use App\Application\RaceService;
 
+function url(string $url = '/'): string
+{
+    if ($url == '/' || $url == '') {
+        return '/';
+    }
+
+    return getenv('APP_ENV') === 'dev' ? "$url.php" : $url;
+}
+
 Dotenv\Dotenv::create(__DIR__)->load();
 
 $blade = new Blade(

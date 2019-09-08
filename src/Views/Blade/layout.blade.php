@@ -50,7 +50,7 @@
 <body class="_bg-dark">
 <div class="container _container-fluid">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a href="index" class="navbar-brand">Horse Racing Simulator</a>
+        <a href="{{ url('') }}" class="navbar-brand">Horse Racing Simulator</a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,8 +59,8 @@
 
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a href="/" class="nav-item nav-link _active">Home <span class="sr-only">(current)</span></a>
-                <a href="last-races.php" class="nav-item nav-link">Last 5 races</a>
+                <a href="{{ url() }}" class="nav-item nav-link _active">Home <span class="sr-only">(current)</span></a>
+                <a href="{{ url('last-races') }}" class="nav-item nav-link">Last 5 races</a>
             </div>
         </div>
 
@@ -71,8 +71,8 @@
                 <button type="button" class="btn btn-warning">progress</button>
             </form> --}}
 
-            <a href="create-race.php" class="btn btn-info @if (!$canAddNewRace) disabled @endif">create race</a>
-            <a href="progress.php"
+            <a href="{{ url('create-race') }}" class="btn btn-info @if (!$canAddNewRace) disabled @endif">create race</a>
+            <a href="{{ url('progress') }}"
                class="btn btn-info @if (!$canProgress) disabled @endif"
                title="Advance all horses by 10 seconds"
                data-toggle="tooltip"
