@@ -4,7 +4,7 @@ namespace Tests\Domain\Model\Race;
 
 use PHPUnit\Framework\TestCase;
 use App\Domain\Model\Horse\Horse;
-use App\Domain\Model\Horse\HorseId;
+use App\Domain\Model\Horse\HorseRepository;
 use App\Domain\Model\Horse\Stats\HorseStats;
 use App\Domain\Model\Race\HorseRun;
 use App\Domain\Model\Race\Stats\HorseRunStats;
@@ -23,7 +23,7 @@ class HorseRunTest extends TestCase
     protected function setUp(): void
     {
         $horse = new Horse(
-            HorseId::obj(),
+            HorseRepository::obj(),
             HorseStats::obj(2.0, 2.0, 2.0)
         );
 
