@@ -1,11 +1,10 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Domain\Model\Race;
 
 use App\Domain\Model\Horse\Stats\Distance;
-use App\Domain\Model\Race\RaceId;
 use App\Domain\Model\Horse\Stats\Time;
 use App\Domain\Model\Horse\HorseRunCollection;
 
@@ -27,7 +26,7 @@ final class Race
         return new self(
             RaceId::obj(),
             new Distance($distance),
-            new HorseRunCollection()
+            HorseRunCollection::obj()
         );
     }
 
@@ -36,13 +35,13 @@ final class Race
         return new self(
             new RaceId($id),
             new Distance($distance),
-            new HorseRunCollection($horseRuns)
+            HorseRunCollection::obj($horseRuns)
         );
     }
 
     public function addHorseRun(HorseRun $horseRun): void
     {
-        $this->horseRuns->addHorseRun($horseRun);
+        $this->horseRuns->add($horseRun);
     }
 
     public function run(int $seconds): void
