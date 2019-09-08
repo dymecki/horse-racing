@@ -22,21 +22,9 @@ final class HorseRun
         $this->stats = $stats;
     }
 
-    public static function obj($data): self
-    {
-        return new self(
-            Horse::obj($data),
-            HorseRunStats::obj(
-                (float) $data->distance_covered,
-                (float) $data->time,
-                $data->horse_position ?? 0
-            )
-        );
-    }
-
     public function run(int $seconds, Distance $raceDistance): void
     {
-        if (!$this->isStillGoing($raceDistance)) {
+        if ($this->isFinished($raceDistance)) {
             return;
         }
 
@@ -44,6 +32,11 @@ final class HorseRun
         $stats     = $algorithm->compute();
 
         $this->stats->update($stats);
+    }
+
+    public function isFinished(Distance $raceDistance): bool
+    {
+        return $this->stats->distanceCovered() === $raceDistance;
     }
 
     public function isStillGoing(Distance $raceDistance): bool
