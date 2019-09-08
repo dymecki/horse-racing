@@ -2,11 +2,11 @@
 
 declare(strict_types = 1);
 
-namespace App\Persistence\Dao;
+namespace App\Persistence\Repositories;
 
 use App\Persistence\Connection\Db;
 
-abstract class BaseDao
+abstract class DbRepository
 {
     /** @var \PDO */
     protected $db;

@@ -2,15 +2,17 @@
 
 declare(strict_types = 1);
 
-namespace App\Persistence\Dao;
+namespace App\Persistence\Repositories;
 
+use App\Domain\Model\Race\Stats\HorseRunStats;
 use App\Domain\Model\Race\HorseRun;
 use App\Domain\Model\Horse\Horse;
 use App\Domain\Model\Race\Race;
+use App\Domain\Model\Horse\HorseRepository;
 
-final class HorseDao extends BaseDao
+final class DbHorseRepository extends DbRepository implements HorseRepository
 {
-    public function addHorse(Horse $horse): void
+    public function add(Horse $horse): void
     {
         $sql = 'INSERT INTO horses (horse_id, speed, strength, endurance)
                 VALUES (:horse_id, :speed, :strength, :endurance)';
@@ -25,13 +27,24 @@ final class HorseDao extends BaseDao
         $this->db->prepare($sql)->execute($data);
     }
 
-    public function getBestHorseRunEver()
+    public function bestHorseRunEver(): HorseRun
     {
-        $sql  = 'SELECT * FROM finished_races_view ORDER BY "time" ASC LIMIT 1';
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute();
+        $sql  = 'SELECT * FROM finished_races_view ORDER BY "time" LIMIT 1';
+        $data = $this->db->query($sql)->fetchObject();
 
-        return $stmt->fetch();
+        $horse = Horse::obj(
+            $data->horse_id,
+            (float) $data->speed,
+            (float) $data->strength,
+            (float) $data->endurance
+        );
+
+        $horseRunStats = HorseRunStats::obj(
+            (float) $data->distance_covered,
+            (float) $data->time
+        );
+
+        return new HorseRun($horse, $horseRunStats);
     }
 
     public function updateHorseProgress(Race $race, HorseRun $horse): void
