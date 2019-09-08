@@ -44,9 +44,9 @@ final class Time
 
     public function formatted(): string
     {
-        [$whole, $decimal] = sscanf((string) $this->seconds, '%d.%d');
+        $decimal = explode('.', (string) number_format($this->seconds, 2, '.', ''))[1];
 
-        return gmdate('i:s.', (int) $this->seconds) . ($decimal ?: '00');
+        return gmdate('i:s.', (int) $this->seconds) . $decimal;
     }
 
     public function __toString()
