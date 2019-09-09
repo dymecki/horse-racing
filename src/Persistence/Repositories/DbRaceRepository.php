@@ -39,7 +39,7 @@ final class DbRaceRepository extends DbRepository implements RaceRepository
                   JOIN races_horses rh   USING(race_id)
                   JOIN horses h          USING(horse_id)';
 
-        $data = $this->db->query($sql)->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_GROUP);
+        $data = $this->db->query($sql)->fetchAll(PDO::FETCH_GROUP);
 
         return $this->get($data);
     }
@@ -94,7 +94,7 @@ final class DbRaceRepository extends DbRepository implements RaceRepository
                  WHERE horse_position <= 3 AND race_number <= 5
                  ORDER BY race_number, horse_position';
 
-        $data = $this->db->query($sql)->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_GROUP);
+        $data = $this->db->query($sql)->fetchAll(PDO::FETCH_GROUP);
 
         return $this->get($data);
     }
