@@ -41,4 +41,9 @@ final class RaceDtoIterator implements \Iterator
     {
         return $this->collection->isset($this->key);
     }
+
+    public function isEmpty(): bool
+    {
+        return $this->collection->isEmpty();
+    }
 }

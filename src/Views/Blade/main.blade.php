@@ -36,17 +36,17 @@
         </div>
     @endif
 
-    @if ($races)
+    @if ($races->isEmpty())
+        <div class="alert alert-primary" role="alert">
+            No active races. Create first race.
+        </div>
+    @else
         <h5>Current races</h5>
 
         <div class="accordion" id="current-races">
             @foreach ($races as $race)
                 @include('races._race', ['race' => $race])
             @endforeach
-        </div>
-    @else
-        <div class="alert alert-primary" role="alert">
-            No active races. Create first race.
         </div>
     @endif
 
