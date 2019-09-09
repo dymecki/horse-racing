@@ -42,7 +42,7 @@ register_shutdown_function(function () use ($logger) {
 function url(string $url = '/'): string
 {
     if ($url == '/' || $url == '') {
-        return '/';
+        return 'index';
     }
 
     return getenv('APP_ENV') == 'dev' ? "$url.php" : $url;

@@ -50,7 +50,7 @@
 <body class="_bg-dark">
 <div class="container _container-fluid">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a href="{{ url('') }}" class="navbar-brand">Horse Racing Simulator</a>
+        <a href="{{ url() }}" class="navbar-brand">Horse Racing Simulator</a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
