@@ -1,17 +1,17 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
-namespace App\Persistence\Connection;
+namespace App\Persistence;
 
 use \PDO;
 
 final class Db
 {
     private static $instance;
-    private $connection;
+    private        $connection;
 
-    private function __construct(DbCredentials $credentials)
+    private function __construct()
     {
         $options = [
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -21,21 +21,21 @@ final class Db
 
         try {
             $this->connection = new PDO(
-                $credentials->dsn(),
-                $credentials->user(),
-                $credentials->password(),
+                $this->dsn(),
+                getenv('DB_USER'),
+                getenv('DB_PASS'),
                 $options
             );
         } catch (\PDOException $e) {
             // Rethrow exception to prevent db credentials being shown on the page
-            throw new \PDOException($e->getMessage(), (int) $e->getCode());
+            throw new \PDOException($e->getMessage(), (int)$e->getCode());
         }
     }
 
     public static function instance(): self
     {
         if (self::$instance === null) {
-            self::$instance = new self(DbCredentialsFactory::build());
+            self::$instance = new self();
         }
 
         return self::$instance;
@@ -44,6 +44,16 @@ final class Db
     public function connection(): PDO
     {
         return $this->connection;
+    }
+
+    private function dsn(): string
+    {
+        return sprintf(
+            '%s:host=%s;dbname=%s',
+            getenv('DB_DRIVER'),
+            getenv('DB_HOST'),
+            getenv('DB_NAME')
+        );
     }
 
     public function __clone()

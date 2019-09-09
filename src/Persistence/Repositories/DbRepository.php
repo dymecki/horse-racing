@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Persistence\Repositories;
 
-use App\Persistence\Connection\Db;
+use App\Persistence\Db;
 
 abstract class DbRepository
 {
