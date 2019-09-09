@@ -3,6 +3,14 @@
 
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^([^\.]+)$ $1.php [NC,L]
+</IfModule>
 
-#    RewriteRule /last-races last-races.php [L]
+<IfModule mod_php5.c>
+#    php_flag    log_errors  on
+#    php_value   error_log   ./../logs/errors.log
+
+    # supress php errors
+    php_flag display_startup_errors off
+    php_flag display_errors off
+    php_flag html_errors off
 </IfModule>

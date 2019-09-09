@@ -5,3 +5,4 @@ todo
 .env
 src/Views/Blade/cache
 .idea
+logs
